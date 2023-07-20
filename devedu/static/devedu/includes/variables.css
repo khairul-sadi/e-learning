@@ -1,0 +1,22 @@
+:root {
+    --color-primary: #8569D4;
+    --color-primary-dark: #544285;
+    --color-primary-light: #8569d421;
+    --color-warning: rgb(214, 16, 16);
+    --color-green: rgb(2, 192, 93);
+    --color-blue: rgb(2, 106, 192);
+
+    --color-white: #fff;
+    --color-off-white: #eee;
+    --color-black: #000;
+    --color-dark: #222;
+    --color-light: #333;
+    --color-box-shadow: rgba(0, 0, 0, 0.3);
+
+    --margin-global: 7vw;
+
+    --font-size-global: 16px;
+
+    --width-max: 1440px;
+    --height-max: 650px;
+}

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css_files %}
+    <link rel="stylesheet" href="{% static 'devedu/includes/utilities.css' %}">
+    <link rel="stylesheet" href="{% static 'admin/delete_course.css' %}">
+{% endblock css_files %}
+{% block title %}Delete Course{% endblock title %}
+
+{% block content %}
+<div class="section_parent">
+    <div class="title">
+        <h1>{{course.title}}</h1>  
+    </div>
+
+    <div class="instructor">
+        <a href="#">{{course.author.first_name|title}} {{course.author.last_name|title}}</a>
+    </div>
+    <div class="thumb_nail">
+        <img src="{{course.thumb_nail.url}}" alt="">
+    </div>
+    <div class="description">
+        <h3>Description</h3>
+        <p>{{course.description}}</p>
+    </div>
+    <div class="price">
+        <h3>Price</h3>
+        <p>Tk. {{course.price}}</p>
+    </div>
+    <form action="{% url 'delete_course' course.id %}" method="POST">
+        {% csrf_token %}
+        <button class="btn-delete btn-red">Delete</button>
+    </form>
+</div>
+{% endblock content %}

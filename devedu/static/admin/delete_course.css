@@ -1,0 +1,53 @@
+.section_parent {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin: 2rem var(--margin-global) 5rem;
+}
+
+
+.title h1 {
+    font-size: 2rem;
+    color: var(--color-light);
+}
+
+.instructor a:link,
+.instructor a:visited {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--color-light);
+    text-decoration: none;
+    border-bottom: 1.5px solid transparent;
+
+    transition: all 0.2s;
+}
+
+.instructor a:active,
+.instructor a:hover {
+    color: var(--color-primary);
+    border-bottom: 1.5px solid var(--color-primary);
+}
+
+.thumb_nail img{
+    width: 100%;
+    margin: 1.5rem 0;
+    border-radius: 5px;
+}
+
+.description, .price {
+    margin-bottom: 1.5rem;
+}
+
+.description h3, .price h3 {
+    font-size: 1.4rem;
+    color: var(--color-light);
+    margin-bottom: .5rem;
+}
+
+.description p, .price p{
+    font-size: 1.1rem;
+}
+
+.btn-delete {
+    font-size: 1.5rem;
+}

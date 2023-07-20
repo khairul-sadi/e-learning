@@ -1,0 +1,60 @@
+body {
+    width: 100vw;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+.courses {
+    width: 90vw;
+    margin: 3rem auto 5rem auto;
+}
+
+.courses h1 {
+    font-size: 2.3rem;
+    color: var(--color-primary);
+    text-align: center;
+    margin-bottom: 5rem;
+}
+
+.courses .table {
+    width: 100%;
+    padding:.5rem 2rem;
+    margin: 2rem auto;
+    box-shadow: 0 4px 10px var(--color-box-shadow);
+}
+
+.row {
+    width: 100%;
+    margin: 2rem auto;
+    display: flex;
+    flex-direction: row;
+}
+.col {
+    height: 3rem;
+    text-align: left;
+}
+
+.col h1 {
+    color: var(--color-black);
+    font-size: 1.2rem;
+    text-align: left;
+    border: none;
+}
+
+.col-id {
+    width: 5%;
+    border-bottom: 1px solid var(--color-light);
+}
+.col-title {
+    width: 45%;
+    border-bottom: 1px solid var(--color-light);
+}
+.col-instructor {
+    width: 30%;
+    border-bottom: 1px solid var(--color-light);
+}
+.col-actions {
+    width: 20%;
+    border-bottom: 1px solid var(--color-light);
+}

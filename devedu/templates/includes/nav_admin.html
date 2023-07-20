@@ -1,0 +1,44 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'devedu/includes/variables.css' %}">
+<link rel="stylesheet" href="{% static 'devedu/includes/nav.css' %}"> 
+
+<nav>
+    <div class="nav__items-left">
+        <div class="logo">// DevEdu</div>
+        <div class="search_box">
+            {% comment %} <p>icon</p> {% endcomment %}
+            <form method="POST">
+                {% csrf_token %}
+                <input type="text" placeholder="SEARCH">
+            </form>
+        </div>
+    </div>
+    <div class="nav__items-right">
+        {% if user.is_authenticated %}
+            {% if user.is_staff %}
+                <a class="nav-item nav-active" href="{% url 'home' %}">HOME</a>
+                <a class="nav-item" href="{% url 'admin_dashboard' %}">DASHBOARD</a>
+                <a class="nav-item" href="#">USERS</a>
+                {% comment %} !<a class="nav-item" href="#">ISSUES</a> {% endcomment %}
+                {% comment %} <a class="nav-item btn btn-login" href="{% url 'profile' %}">PROFILE</a> {% endcomment %}
+                {% else %}
+                <a class="nav-item nav-active" href="{% url 'home' %}">HOME</a>
+                <a class="nav-item" href="#">COURSES</a>
+                <a class="nav-item" href="#">ABOUT</a>
+                {% endif %}
+                <a class="nav-item btn btn-login" href="#">PROFILE</a>
+                <a class="nav-item btn btn-signup" href="/logout">LOGOUT</a>
+            {% else %}
+                <a class="nav-item nav-active" href="{% url 'home' %}">HOME</a>
+                <a class="nav-item" href="#">COURSES</a>
+                <a class="nav-item" href="#">ABOUT</a>
+            <a class="nav-item btn btn-login" href="/login">
+                LOG IN
+            </a>
+            <a class="nav-item btn btn-signup" href="/sign-up">
+                SIGN UP
+            </a>
+        {% endif %}
+    </div>
+</nav>

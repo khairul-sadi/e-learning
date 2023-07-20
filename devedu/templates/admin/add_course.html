@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css_files %}
+    <link rel="stylesheet" href="{% static 'devedu/includes/utilities.css' %}">
+    <link rel="stylesheet" href="{% static 'admin/add_course.css' %}">
+{% endblock css_files %}
+
+{% block title %}Add new course{% endblock title %}
+
+{% block content %}
+<h1>Add New Course</h1>
+<div class="section_parent">
+    <a class="btn-dashboard" href="{% url 'admin_dashboard' %}">Back to Dashboard-></a>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% for c in course %}
+        <div class="label">
+            {{c.label}}
+        </div>
+        {{c}}<br>
+        {{c.errors}}<br>
+        {% endfor %}
+        <br>
+        <button class="btn-green" type="submit">Add new content</button>
+    </form>
+</div>
+{% endblock content %}
