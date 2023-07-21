@@ -1,5 +1,4 @@
 # E-Learning
-___
 Project description.
 ___
 ## Dependencies
@@ -13,7 +12,6 @@ ___
     ```
     python -m pip install Pillow
     ``` 
-
 ___
 ## Runnig the Website on Local Server
 * Download the Download.zip file and extract.
