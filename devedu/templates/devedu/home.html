@@ -60,17 +60,3 @@
         <h3 class="course_price">Tk. 51</h3>
     </div>
 </div> {% endcomment %}
-
-{% for course in courses %}
-    <div class="course__container">
-        <div class="course_card">
-            <div class="image_container">
-                <img src="{{course.thumb_nail.url}}" alt="Thumb Nail">
-            </div>
-            <a class="course_title" href="#"><h3>{{course.title}}</h3></a>
-            <a class="course_instructor" href="#"><p>{{course.author.first_name|title}} {{course.author.last_name|title}}</p></a>
-            <h3 class="course_rating">4.7</h3>
-            <h3 class="course_price">Tk. {{course.price}}</h3>
-        </div>
-    </div>
-{% endfor %}
