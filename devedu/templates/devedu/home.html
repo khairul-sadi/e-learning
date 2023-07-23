@@ -6,11 +6,71 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&family=Merriweather:wght@300;400;700&family=Montserrat:wght@300;400;700&family=Poppins:wght@100;400;600;900&family=Roboto:wght@400;700&family=Sacramento&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'devedu/base.css' %}">
+    <link rel="stylesheet" href="{% static 'devedu/includes/utilities.css' %}">
+    <link rel="stylesheet" href="{% static 'devedu/includes/variables.css' %}">
     <link rel="stylesheet" href="{% static 'devedu/home.css' %}">
 {% endblock css_files %}
 {% block title %}DevEdu{% endblock title %}
 
 {% block content %}
+<header>
+    <div class="left">
+        <h1>Learn with <span>DevEdu</span> Anytime Anywhere.</h1>
+        <p>Learning that gets you skills for present and future.<br>Get started with us.</p>
+        <div class="header__btns">
+            <a class="btn-primary" href="/sign-up">Get started</a>
+            <a class="btn-secondary" href="#">Courses</a>
+        </div>
+    </div>
+    <div class="right">
+        <img src="{% static 'devedu/images/header_img.png' %}" alt="">
+    </div>
+</header>
+
+<section class="section__courses">
+    <h2>Courses</h2>
+    <div class="course__container">
+        {% for course in courses %}
+            <div class="course_card">
+                <div class="image_container">
+                    <img src="{{course.thumb_nail.url}}" alt="Thumb Nail">
+                </div>
+                <a class="course_title" href="#"><h3>{{course.title}}</h3></a>
+                <a class="course_instructor" href="#"><p>{{course.author.first_name|title}} {{course.author.last_name|title}}</p></a>
+                <h3 class="course_rating">4.7</h3>
+                <h3 class="course_price">Tk. {{course.price}}</h3>
+            </div>
+        {% endfor %}
+    </div>
+    <a class="btn-more" href="#">View more-></a>
+</section>
 {% endblock content %}
 
 {% block script_files %}{% endblock script_files %}
+
+
+{% comment %} <div class="course__container">
+    <div class="course_card">
+        <div class="image_container">
+            <img src="{% static 'devedu/images/java.png' %}" alt="Thumb Nail">
+        </div>
+        <a class="course_title" href="#"><h3>Cloud Computing</h3></a>
+        <a class="course_instructor" href="#"><p>Abdul Bari</p></a>
+        <h3 class="course_rating">4.7</h3>
+        <h3 class="course_price">Tk. 51</h3>
+    </div>
+</div> {% endcomment %}
+
+{% for course in courses %}
+    <div class="course__container">
+        <div class="course_card">
+            <div class="image_container">
+                <img src="{{course.thumb_nail.url}}" alt="Thumb Nail">
+            </div>
+            <a class="course_title" href="#"><h3>{{course.title}}</h3></a>
+            <a class="course_instructor" href="#"><p>{{course.author.first_name|title}} {{course.author.last_name|title}}</p></a>
+            <h3 class="course_rating">4.7</h3>
+            <h3 class="course_price">Tk. {{course.price}}</h3>
+        </div>
+    </div>
+{% endfor %}

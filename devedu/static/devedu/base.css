@@ -7,3 +7,15 @@
     font-size: var(--font-size-global);
     color: var(--color-dark);
 }
+
+html {
+    scroll-behavior: smooth;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
+a {
+    text-decoration: none;
+}

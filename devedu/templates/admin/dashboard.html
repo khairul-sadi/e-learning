@@ -4,6 +4,7 @@
 {% block css_files %}
     <link rel="stylesheet" href="{% static 'devedu/includes/utilities.css' %}">
     <link rel="stylesheet" href="{% static 'admin/dashboard.css' %}">
+    {% comment %} <link rel="stylesheet" href="{% static 'devedu/base.css' %}"> {% endcomment %}
 {% endblock css_files %}
 
 {% block content %}
@@ -41,4 +42,5 @@
         {% endfor %}
     </div>
 </div>
+
 {% endblock content %}

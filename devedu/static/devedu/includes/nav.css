@@ -1,7 +1,8 @@
 
 nav {
+    position: relative;
     height: 3.5rem;
-    width: 100vw;
+    width: 100%;
     padding: 0 var(--margin-global);
     background-color: var(--color-white);
     box-shadow: 0 2px 4px var(--color-box-shadow);
@@ -85,7 +86,7 @@ nav {
 
 .nav__items-right .btn-login:active,
 .nav__items-right .btn-login:hover {
-    transform: translateY(-2px);
+    transform: translateY(-1px);
     box-shadow: 0 2px 4px var(--color-box-shadow);
 }
 
@@ -110,6 +111,4 @@ nav {
 
 .nav-active {
     color: var(--color-primary);
-    font-weight: 500;
-    border-bottom: 1.5px solid var(--color-primary);
 }
