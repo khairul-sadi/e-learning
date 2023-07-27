@@ -1,4 +1,3 @@
-
 header {
     margin: 0 var(--margin-global);
     height: 80vh;
@@ -131,3 +130,129 @@ header {
 .course_card .course_price {
     font-size: 1.1rem;
 }
+
+
+/* ! Section Courses ENDs */
+/* ! Section APPLY Starts */
+.apply {
+    text-align: center;
+    padding: 4rem var(--margin-global);
+}
+
+.apply h2 {
+    color: var(--color-dark);
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}
+
+.apply p {
+    margin-bottom: 2rem;
+    font-size: 1.2rem;
+}
+
+.apply .btn-apply {
+    font-size: 1.2rem;
+    color: var(--color-white);
+    font-weight: 600;
+    background-color: var(--color-primary);
+    border: none;
+    border-radius: 50rem;
+    padding: 0.5rem 1.5rem;
+    transition: all 0.2s;
+}
+
+.apply .btn-apply:hover {
+    cursor: pointer;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px var(--color-box-shadow);
+}
+
+.apply .btn-apply:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 4px var(--color-box-shadow);
+}
+
+/* ! Section APPLY Ends */
+
+/* ! Overlay */
+
+.terms {
+    position: absolute;
+    top: 0;
+    left: 0;
+    min-height: 100vh;
+}
+
+.overlay {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background-color: var(--color-overlay);
+}
+
+.overlay p {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--color-off-white);
+    margin-top: 2rem;
+    margin-left: 2rem;
+    transition: all 0.2s;
+}
+
+
+.overlay p:hover {
+    cursor: pointer;
+    color: var(--color-white);
+}
+
+.terms_card {
+    position:fixed;
+    margin: 2rem var(--margin-global);
+    padding: 3rem 5rem;
+    background-color: var(--color-white);
+    border-radius: 5px;
+    z-index: 100;
+}
+
+.terms_card h1 {
+    font-size: 1.5rem;
+    color: var(--color-light);
+    margin: 1rem 0;
+}
+
+.terms_card p {
+    font-size: 1.2rem;
+    line-height: 2rem;
+}
+
+.terms_card ul li {
+    font-size: 1.2rem;
+    line-height: 2rem;
+    margin-left: 5rem;
+}
+
+.terms_card .accept_warning {
+    margin: 2rem 0 1rem 0;
+}
+
+.terms_card a {
+    margin-right: 1rem;
+}
+
+.hidden {
+    display: none;
+}
+
+.btn-apply-no {
+    font-size: 1.2rem;
+    color: var(--color-white);
+    padding: .3rem 1rem;
+    background-color: var(--color-warning);
+    border: none;
+    border-radius: 3px;
+    margin-right: 1rem;
+}
+
+/* ! Overlay End*/

@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css_files %}
+    <link rel="stylesheet" href="{% static 'devedu/includes/utilities.css' %}">
+    <link rel="stylesheet" href="{% static 'devedu/includes/variables.css' %}">
+    <link rel="stylesheet" href="{% static 'devedu/user_profile.css' %}">
+{% endblock css_files %}
+{% block title %}{{user_profile}}{% endblock title %}
+
+{% block content %}
+<section class="profile_info">
+    <div class="left">
+        {% if user_profile.profile_pic %}
+        <img src="{{user_profile.profile_pic.url}}" alt="Profile Image">
+        {% else %}
+        <img src="{% static 'devedu/images/profile_img.jpg' %}" alt="">
+        {% endif %}
+    </div>
+    <div class="right">
+        <h1>{{user_profile|title}}</h1>
+        <a class="btn-edit" href="{% url 'edit_profile' user.username %}">Edit</a><br>
+        {% if user_profile.is_instructor %}
+        <p class="profession">Instructor</p>
+        {% else %}
+        <p class="profession">Student</p>
+        {% endif %}
+        <p class="about">{{user_profile.about}}</p>
+        <h2>Links</h2>
+        <div class="links">
+            {% if user_profile.linkedin %}
+            <a href="{{user_profile.linkedin}}" target="_blank">LinkedIn</a>
+            {% endif %}
+            {% if user_profile.github %}
+            <a href="{{user_profile.github}}" target="_blank">Github</a>
+            {% endif %}
+            {% if user_profile.mail %}
+            <a href="{{user_profile.mail}}" target="_blank">Mail</a>
+            {% endif %}
+            {% if user_profile.website %}
+            <a href="{{user_profile.website}}" target="_blank">Website</a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="section__courses">
+    <h2>Courses</h2>
+    <div class="course__container">
+            <div class="course_card">
+                <div class="image_container">
+                    <img src="{% static 'devedu/images/cloud.png' %}" alt="Thumb Nail">
+                </div>
+                <a class="course_title" href="#"><h3>Cloud Computing</h3></a>
+                <a class="course_instructor" href="#"><p>Instructor</p></a>
+                <h3 class="course_rating">4.7</h3>
+                <h3 class="course_price">Tk. 51.0</h3>
+            </div>
+            <div class="course_card">
+                <div class="image_container">
+                    <img src="{% static 'devedu/images/cloud.png' %}" alt="Thumb Nail">
+                </div>
+                <a class="course_title" href="#"><h3>Cloud Computing</h3></a>
+                <a class="course_instructor" href="#"><p>Instructor</p></a>
+                <h3 class="course_rating">4.7</h3>
+                <h3 class="course_price">Tk. 51.0</h3>
+            </div>
+            <div class="course_card">
+                <div class="image_container">
+                    <img src="{% static 'devedu/images/cloud.png' %}" alt="Thumb Nail">
+                </div>
+                <a class="course_title" href="#"><h3>Cloud Computing</h3></a>
+                <a class="course_instructor" href="#"><p>Instructor</p></a>
+                <h3 class="course_rating">4.7</h3>
+                <h3 class="course_price">Tk. 51.0</h3>
+            </div>
+            <div class="course_card">
+                <div class="image_container">
+                    <img src="{% static 'devedu/images/cloud.png' %}" alt="Thumb Nail">
+                </div>
+                <a class="course_title" href="#"><h3>Cloud Computing</h3></a>
+                <a class="course_instructor" href="#"><p>Instructor</p></a>
+                <h3 class="course_rating">4.7</h3>
+                <h3 class="course_price">Tk. 51.0</h3>
+            </div>
+            <div class="course_card">
+                <div class="image_container">
+                    <img src="{% static 'devedu/images/cloud.png' %}" alt="Thumb Nail">
+                </div>
+                <a class="course_title" href="#"><h3>Cloud Computing</h3></a>
+                <a class="course_instructor" href="#"><p>Instructor</p></a>
+                <h3 class="course_rating">4.7</h3>
+                <h3 class="course_price">Tk. 51.0</h3>
+            </div>
+    </div>
+</section>
+{% endblock content %}

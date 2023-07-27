@@ -22,7 +22,13 @@
         </div>
         <div class="course_info-item">
             <h3>Instructor: </h3>
-            <p>{{course.author.first_name}} {{course.author.last_name}}</p>
+            <p>
+                {% if course.author.first_name or course.author.last_name %}
+                    {{ course.author.first_name|title }} {{ course.author.last_name|title }}
+                    {% else %} 
+                    {{ course.author }} 
+                    {% endif %}
+            </p>
         </div>
         <div class="course_info-item">
             <h3>Price: </h3>

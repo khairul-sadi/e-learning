@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserModel
 from django.contrib.auth.models import User
 
-from .models import Course, CourseContent
+from .models import Course, CourseContent, UserProfile
 
 
 class RegistrationForm(UserCreationForm):
@@ -25,6 +25,7 @@ class CourseForm(forms.ModelForm):
     class Meta:
         model = Course
         fields = "__all__"
+        exclude = ["slug"]
 
 
 class CourseContentForm(forms.ModelForm):
@@ -34,5 +35,7 @@ class CourseContentForm(forms.ModelForm):
         # fields = ['serial', "title", 'file']
 
 
-# CourseFormSet = forms.inlineformset_factory(
-#     Course, CourseContent, form=CourseContentForm, extra=1)
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        exclude = ["user", "is_instructor", "applied"]

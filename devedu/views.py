@@ -3,8 +3,10 @@ from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
-from .models import Course, CourseContent
-from .forms import RegistrationForm, LoginForm, CourseForm, CourseContentForm
+from django.contrib.auth.models import User
+
+from .models import Course, CourseContent, UserProfile, Instructor
+from .forms import RegistrationForm, LoginForm, CourseForm, CourseContentForm, UserProfileForm
 
 # Create your views here.
 
@@ -23,7 +25,8 @@ def signup(request):
 
         if form.is_valid():
             user = form.save()
-            # login(request, user)
+            # ? following line is edited
+            UserProfile.objects.create(user=user)
             return redirect("/login")
     else:
         form = RegistrationForm()
@@ -43,8 +46,6 @@ def user_login(request):
         user = authenticate(username=user_name, password=password1)
         if user:
             login(request, user)
-            # if user.is_staff:  # type: ignore
-            #     return redirect("admin_dashboard")
             return redirect("home")
     else:
         form = LoginForm()
@@ -55,6 +56,61 @@ def user_login(request):
     return render(request, "registration/login.html", context)
 
 
+# ! USER PROFILE AND EDIT PROFILE START
+def user_profile(request, username):
+    try:
+        user = User.objects.get(username=username)
+    except:
+        user = None
+        # ! Gives error otherwist
+        return render(request, "devedu/home.html", {})
+    user_profile = UserProfile.objects.get(user=user)
+    context = {
+        "user_profile": user_profile
+    }
+    return render(request, "devedu/user_profile.html", context)
+
+
+def edit_profile(request, username):
+    try:
+        user = User.objects.get(username=username)
+    except:
+        user = None
+        # ! Gives error otherwist
+        return render(request, "devedu/home.html", {})
+    user_profile = UserProfile.objects.get(user=user)
+    user_profile_form = UserProfileForm(instance=user_profile)
+    if request.method == "POST":
+        user_profile_form = UserProfileForm(
+            request.POST, request.FILES, instance=user_profile)
+        if user_profile_form.is_valid():
+            user_profile_form.save()
+            return HttpResponseRedirect(reverse("user_profile", args=[username]))
+
+    context = {
+        "user_profile": user_profile,
+        "user_profile_form": user_profile_form
+    }
+    return render(request, "devedu/edit_profile.html", context)
+
+# ! USER PROFILE AND EDIT PROFILE END
+
+
+# ! COURSE DETAIL starts
+
+def course_detail(request, slug):
+    course = Course.objects.get(slug=slug)
+    contents = course.contents.all()  # type: ignore
+    context = {
+        "contents": contents,
+        "course": course,
+    }
+    return render(request, "devedu/course_detail.html", context)
+
+# ! COURSE DETAIL ends
+
+
+# ? ALL ADMIN PANEL BELOW START
 def admin_dashboard(request):
     courses = Course.objects.all()
     context = {
@@ -192,3 +248,4 @@ def delete_content(request, id):
     return render(request, "admin/delete_content.html", context)
 
 # ! DELETE ENDS
+# ? Admin panel ends

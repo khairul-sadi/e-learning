@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css_files %}
+    <link rel="stylesheet" href="{% static 'devedu/includes/utilities.css' %}">
+    <link rel="stylesheet" href="{% static 'devedu/includes/variables.css' %}">
+    <link rel="stylesheet" href="{% static 'devedu/course_detail.css' %}">
+{% endblock css_files %}
+
+{% comment %} ? change the title {% endcomment %}
+{% block title %}Course Title{% endblock title %}
+
+{% block content %}
+<section class="section_header">
+    <div class="section_header-container">
+        <h1>{{course.title}}</h1>
+        <p class="author">Created by 
+            <a href="#">
+                {% if course.author.first_name or course.author.last_name %}
+                {{course.author.first_name}} {{course.author.last_name}}
+                {% else %}
+                {{course.author}}
+                {% endif %}
+            </a>
+        </p>
+        
+        <div class="thumb_nail">
+            {% comment %} ? see udemys page {% endcomment %}
+            <img src="{{course.thumb_nail.url}}" alt="Thumb Nail">
+        </div>
+        <h2>Description</h2>
+        <p class="description">{{course.description}}</p>
+        <h2 class="rating">Rating: 4.7 (does not read from DB yet)</h2>
+        <p>Last updated on <span>{{course.last_updated_on}}</span></p>
+        <h2 class="price">Tk. {{course.price}}</h2>
+        <div class="btns">
+            <a class="btn-add-wishlist" href="#">Add to wishlist</a>
+            <a class="btn-enroll" href="#">Enroll now</a>
+        </div>
+        <a class="btn-gift" href="#">Gift this course</a>
+    </div>
+</section>
+<section class="course_contents">
+    <h1>Course contents</h1>
+    <div class="table">
+        {% for content in contents %}
+        <div class="content">
+            <h2 class="serial">{{content.serial}}</h2>
+            <a class="title" href="#">{{content.title}}</a>
+            <h3 class="type">mp4(!work)</h3>
+        </div>
+        {% endfor %}     
+    </div>
+</section>
+{% endblock content %}
+

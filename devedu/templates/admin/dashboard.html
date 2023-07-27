@@ -29,7 +29,11 @@
                     {{ course.title }}
                 </div>
                 <div class="col col-instructor">
-                    {{ course.author.first_name }} 
+                    {% if course.author.first_name or course.author.last_name %}
+                    {{ course.author.first_name|title }} {{ course.author.last_name|title }}
+                    {% else %} 
+                    {{ course.author }} 
+                    {% endif %}
                 </div>
                 <div class="col col-actions">
                     {% comment %} <a class="btn-blue btn-edit" href="{% url 'edit_course' course.id %}">Edit</a> {% endcomment %}

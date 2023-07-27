@@ -20,3 +20,4 @@ ICONS:
     13. stars
     14. linkedin
     15. Gallery
+    16. camera for profile image upload

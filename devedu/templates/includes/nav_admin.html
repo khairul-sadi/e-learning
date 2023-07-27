@@ -27,7 +27,7 @@
                 <a class="nav-item" href="#">COURSES</a>
                 <a class="nav-item" href="#">ABOUT</a>
                 {% endif %}
-                <a class="nav-item btn btn-login" href="#">PROFILE</a>
+                <a class="nav-item btn btn-login" href="{% url 'user_profile' user.username %}">PROFILE</a>
                 <a class="nav-item btn btn-signup" href="/logout">LOGOUT</a>
             {% else %}
                 <a class="nav-item" href="{% url 'home' %}">HOME</a>
