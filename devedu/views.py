@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
@@ -17,6 +18,43 @@ def home(request):
         "courses": courses
     }
     return render(request, "devedu/home.html", context)
+
+
+@login_required(login_url="/login")
+def enroll_course(request, slug, username):
+    user = User.objects.get(username=username)
+    if user.is_staff:
+        message = "This user is a staff. Try a Student account to enroll."
+        # ! redirect to the course detail page
+        return redirect(reverse("course_detail", args=[slug]))
+    user_profile = UserProfile.objects.get(user=user)
+    course = Course.objects.get(slug=slug)
+    instractor = course.author
+    enrolled = course.enrolled_students.all()
+    if user_profile == instractor.user:  # type: ignore
+        message = "You are the Instractor of this course!"
+        # ! redirect to the course detail page
+        # return redirect("course_detail")
+        return redirect(reverse("course_detail", args=[course.slug]))
+    if user_profile in enrolled:
+        message = "You're already enrolled in this course!"
+        # ! redirect to the course detail page
+        # return redirect("course_detail")
+        return redirect(reverse("course_detail", args=[course.slug]))
+    else:
+        response = course.enrolled_students.add(user_profile)
+        if response:
+            message = "Course added successfully."
+        else:
+            message = "Course didn't added successfully. Try again later."
+    context = {
+        "message": message,
+        "course": course,
+        "en_students": enrolled,
+    }
+    return redirect(reverse("course_detail", args=[course.slug]))
+
+# !------------------------ LOG SIGN starts ----------------------------#
 
 
 def signup(request):
@@ -55,8 +93,10 @@ def user_login(request):
     }
     return render(request, "registration/login.html", context)
 
+# !------------------------ LOG SIGN end ----------------------------#
 
-# ! USER PROFILE AND EDIT PROFILE START
+
+# ! -----------------------------USER PROFILE AND EDIT PROFILE START---------------#
 def user_profile(request, username):
     try:
         user = User.objects.get(username=username)
@@ -65,12 +105,15 @@ def user_profile(request, username):
         # ! Gives error otherwist
         return render(request, "devedu/home.html", {})
     user_profile = UserProfile.objects.get(user=user)
+    enrolled_courses = user_profile.courses.all()  # type: ignore
     context = {
+        "en_courses": enrolled_courses,
         "user_profile": user_profile
     }
     return render(request, "devedu/user_profile.html", context)
 
 
+# ? Check if the same user is trying to edit or not
 def edit_profile(request, username):
     try:
         user = User.objects.get(username=username)
@@ -93,21 +136,54 @@ def edit_profile(request, username):
     }
     return render(request, "devedu/edit_profile.html", context)
 
-# ! USER PROFILE AND EDIT PROFILE END
+# ! -----------------------USER PROFILE AND EDIT PROFILE END-------------------------#
 
 
-# ! COURSE DETAIL starts
+# ! ----------------------------COURSE DETAIL starts-----------------#
 
 def course_detail(request, slug):
     course = Course.objects.get(slug=slug)
-    contents = course.contents.all()  # type: ignore
+    contents = course.contents.all().order_by("serial")  # type: ignore
+    enrolled_students = course.enrolled_students.all()
+    en_students = []
+    for stu in enrolled_students:
+        en_students.append(stu.user)
     context = {
         "contents": contents,
         "course": course,
+        "en_students": en_students,
     }
     return render(request, "devedu/course_detail.html", context)
 
-# ! COURSE DETAIL ends
+# ! ------------------------------COURSE DETAIL ends---------------------#
+
+
+# ! --------------------------------Application-------------------------------#
+@login_required(login_url="/login")
+def apply(request, username):
+    user = User.objects.get(username=username)
+    user_form = UserProfileForm()
+
+    if not user.is_staff:
+        user_profile = UserProfile.objects.get(user=user)
+        if request.method == "POST":
+            user_form = UserProfileForm(
+                request.POST, request.FILES, instance=user_profile)
+            if user_form.is_valid():
+                user_profile.applied = True
+                user_profile.save()
+                user_form.save()
+                return redirect("home")
+        else:
+            user_form = UserProfileForm(instance=user_profile)
+    else:
+        user_profile = False
+    context = {
+        "user_profile": user_profile,
+        "user_form": user_form,
+    }
+    return render(request, "devedu/apply.html", context)
+# ! ------------------------------Application Ends----------------------------#
 
 
 # ? ALL ADMIN PANEL BELOW START
@@ -119,8 +195,10 @@ def admin_dashboard(request):
     return render(request, "admin/dashboard.html", context)
 
 
-#! Add Starts
+#! --------------------------------- Add Starts ------------------------------------#
 # ? Check permissions before deleting
+
+
 def add_new_course(request):
     if request.method == "POST":
         course = CourseForm(request.POST, request.FILES)
@@ -161,10 +239,10 @@ def add_contents(request, id):
 
     return render(request, "admin/add_contents.html", context)
 
-# ! Add Ends
+# ! -------------------------------- Add Ends -------------------------------#
 
 
-# ! Edits start
+# ! -------------------------------- Edits start ------------------------------#
 # ? Check permissions before deleting
 def edit_course(request, id):
     course = Course.objects.get(pk=id)
@@ -215,7 +293,7 @@ def edit_content(request, id):
 # ! Edits Ends
 
 
-# ! DELETE STARTS
+# !----------------------- DELETE STARTS----------------------------#
 # ? Check permissions before deleting
 def delete_course(request, id):
     course = Course.objects.get(pk=id)
@@ -247,5 +325,35 @@ def delete_content(request, id):
     }
     return render(request, "admin/delete_content.html", context)
 
-# ! DELETE ENDS
-# ? Admin panel ends
+# ! -------------------------------DELETE ENDS------------------------------------------#
+
+
+# !----------------------------- Applications start ----------------------------#
+def admin_applications(request):
+    users = UserProfile.objects.filter(applied=True)
+    context = {
+        "users": users,
+    }
+    return render(request, "admin/applications.html", context)
+
+
+def accept(request, username):
+    user = User.objects.get(username=username)
+    user_profile = UserProfile.objects.get(user=user)
+    user_profile.is_instructor = True
+    user_profile.applied = False
+    user_profile.save()
+    Instructor.objects.create(user=user_profile)
+    return redirect("admin_applications")
+
+
+def reject(request, username):
+    user = User.objects.get(username=username)
+    user_profile = UserProfile.objects.get(user=user)
+    user_profile.is_instructor = False
+    user_profile.applied = False
+    user_profile.save()
+    return redirect("admin_applications")
+
+# !----------------------------- Applications end ----------------------------#
+# ? -----------------------------Admin panel ends---------------------------------------#

@@ -5,18 +5,34 @@ body {
     margin: 0;
 }
 
+.tabs {
+    margin: 3rem 0;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.tabs a:not(:last-child) {
+    border-right: 2px solid var(--color-black);
+}
+
+.tabs a {
+    font-size: 1.8rem;
+    font-weight: 300;
+    padding-right: 2rem;
+    color: var(--color-light);
+    text-align: center;
+}
+
+.tabs .tab_active {
+    font-weight: 600;
+}
 
 .courses {
     width: 90%;
     margin: 3rem auto 5rem auto;
 }
 
-.courses h1 {
-    font-size: 2.3rem;
-    color: var(--color-primary);
-    text-align: center;
-    margin-bottom: 5rem;
-}
 
 .courses .table {
     width: 100%;

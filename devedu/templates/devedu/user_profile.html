@@ -19,7 +19,9 @@
     </div>
     <div class="right">
         <h1>{{user_profile|title}}</h1>
+        {% if user == user_profile.user %}
         <a class="btn-edit" href="{% url 'edit_profile' user.username %}">Edit</a><br>
+        {% endif %}
         {% if user_profile.is_instructor %}
         <p class="profession">Instructor</p>
         {% else %}
@@ -47,51 +49,21 @@
 <section class="section__courses">
     <h2>Courses</h2>
     <div class="course__container">
-            <div class="course_card">
-                <div class="image_container">
-                    <img src="{% static 'devedu/images/cloud.png' %}" alt="Thumb Nail">
-                </div>
-                <a class="course_title" href="#"><h3>Cloud Computing</h3></a>
-                <a class="course_instructor" href="#"><p>Instructor</p></a>
-                <h3 class="course_rating">4.7</h3>
-                <h3 class="course_price">Tk. 51.0</h3>
+        {% for course in en_courses %}
+        <div class="course_card">
+            <div class="image_container">
+                <a href="{% url 'course_detail' course.slug %}">
+                    <img src="{{course.thumb_nail.url}}" alt="Thumb Nail">
+                </a>
             </div>
-            <div class="course_card">
-                <div class="image_container">
-                    <img src="{% static 'devedu/images/cloud.png' %}" alt="Thumb Nail">
-                </div>
-                <a class="course_title" href="#"><h3>Cloud Computing</h3></a>
-                <a class="course_instructor" href="#"><p>Instructor</p></a>
-                <h3 class="course_rating">4.7</h3>
-                <h3 class="course_price">Tk. 51.0</h3>
-            </div>
-            <div class="course_card">
-                <div class="image_container">
-                    <img src="{% static 'devedu/images/cloud.png' %}" alt="Thumb Nail">
-                </div>
-                <a class="course_title" href="#"><h3>Cloud Computing</h3></a>
-                <a class="course_instructor" href="#"><p>Instructor</p></a>
-                <h3 class="course_rating">4.7</h3>
-                <h3 class="course_price">Tk. 51.0</h3>
-            </div>
-            <div class="course_card">
-                <div class="image_container">
-                    <img src="{% static 'devedu/images/cloud.png' %}" alt="Thumb Nail">
-                </div>
-                <a class="course_title" href="#"><h3>Cloud Computing</h3></a>
-                <a class="course_instructor" href="#"><p>Instructor</p></a>
-                <h3 class="course_rating">4.7</h3>
-                <h3 class="course_price">Tk. 51.0</h3>
-            </div>
-            <div class="course_card">
-                <div class="image_container">
-                    <img src="{% static 'devedu/images/cloud.png' %}" alt="Thumb Nail">
-                </div>
-                <a class="course_title" href="#"><h3>Cloud Computing</h3></a>
-                <a class="course_instructor" href="#"><p>Instructor</p></a>
-                <h3 class="course_rating">4.7</h3>
-                <h3 class="course_price">Tk. 51.0</h3>
-            </div>
+            <a class="course_title" href="#"><h3>{{course.title}}</h3></a>
+            <a class="course_instructor" href="#"><p>{{course.author}}</p></a>
+            <h3 class="course_rating">4.7</h3>
+            <h3 class="course_price">Tk. {{course.price}}</h3>
+        </div>
+        {% endfor %}
+
     </div>
 </section>
+
 {% endblock content %}

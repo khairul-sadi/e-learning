@@ -1,12 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block css_files %}
-    {% comment %} <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&family=Merriweather:wght@300;400;700&family=Montserrat:wght@300;400;700&family=Poppins:wght@100;400;600;900&family=Roboto:wght@400;700&family=Sacramento&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'devedu/base.css' %}"> {% endcomment %}
-    <link rel="stylesheet" href="{% static 'devedu/includes/utilities.css' %}">
+{% block css_files %} <link rel="stylesheet" href="{% static 'devedu/includes/utilities.css' %}">
     <link rel="stylesheet" href="{% static 'devedu/includes/variables.css' %}">
     <link rel="stylesheet" href="{% static 'devedu/home.css' %}">
 {% endblock css_files %}
@@ -58,46 +53,15 @@
     <h2>Apply as an Instructor</h2>
     <p>Have prior knowledge and experience with any techogy and want to teach others?
         <br>Send us your resume now.</p>
-    <button class="btn-apply"  href="">Apply now</button>
+
+    {% if user.is_authenticated %}
+    <a class="btn-apply btn-primary"  href="{% url 'apply' user.username %}">Apply now</a>
+    {% else %}
+    <a class="btn-apply btn-primary"  href="/login">Apply now</a>
+    {% endif %}
 
 </section>
-
-
-<div class="terms hidden">
-    <div class="terms_card">
-        <h1>Terms & Conditions</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Alias esse cupiditate 
-            beatae id cumque sint maiores culpa doloribus saepe neque! 
-            impedit beatae, ratione alias.   
-        </p>
-        <br>
-        <ul>
-
-            <li>
-                Rem vitae quaerat voluptatibus blanditiis hic 
-                necessitatibus enim a, fuga dolorum ipsam corrupti praesentium esse culpa similique 
-                numquam accusantium reprehenderit! 
-            </li>
-            <li>
-                Rem vitae quaerat voluptatibus blanditiis hic 
-                necessitatibus enim a, fuga dolorum ipsam corrupti praesentium esse culpa similique 
-                numquam accusantium reprehenderit! 
-            </li>
-            <li>
-                Have to have an account first to apply.
-            </li>
-            <li>
-                Make sure you didn't applied already as an Instructor here.
-            </li>
-        </ul>
-        <p class="accept_warning">Accept all our terms and conditions?</p>
-        <button class="btn-apply-no">No</button>
-        <a class="btn-green" href="">Yes</a>
-    </div>
-    <div class="overlay">
-        <p>X</p>
-    </div>
-</div>
+{% include "includes/footer.html" %}
 {% endblock content %}
 
 {% block script_files %}

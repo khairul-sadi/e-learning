@@ -10,7 +10,13 @@ urlpatterns = [
     path("login", views.user_login, name="login"),
     path("sign-up", views.signup, name="sign_up"),
     # ! Admin
-    path("admin-dashboard/", views.admin_dashboard, name="admin_dashboard"),
+    path("admin-dashboard/courses", views.admin_dashboard, name="admin_dashboard"),
+    path("admin-dashboard/applications",
+         views.admin_applications, name="admin_applications"),
+    path("admin-dashboard/applications/<str:username>",
+         views.accept, name="accept_application"),
+    path("admin-dashboard/applications/<str:username>",
+         views.reject, name="reject_application"),
     path("admin-dashboard/add-course",
          views.add_new_course, name="add_new_course"),
     path("admin-dashboard/add-course/add-content/<int:id>",
@@ -26,7 +32,10 @@ urlpatterns = [
     # ! user
     path("<str:username>", views.user_profile, name="user_profile"),
     path("edit-profile/<str:username>", views.edit_profile, name="edit_profile"),
+    path("apply/<str:username>", views.apply, name="apply"),
     # ! course detail
     # ? use course slug
-    path("course-detail/<slug:slug>", views.course_detail, name="course_detail")
+    path("course-detail/<slug:slug>", views.course_detail, name="course_detail"),
+    path("course-detail/<slug:slug>/<str:username>",
+         views.enroll_course, name="enroll_course"),
 ]

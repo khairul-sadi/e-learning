@@ -19,17 +19,16 @@
             {% if user.is_staff %}
                 <a class="nav-item" href="{% url 'home' %}">HOME</a>
                 <a class="nav-item" href="{% url 'admin_dashboard' %}">DASHBOARD</a>
-                <a class="nav-item" href="#">USERS</a>
                 {% comment %} !<a class="nav-item" href="#">ISSUES</a> {% endcomment %}
                 {% comment %} <a class="nav-item btn btn-login" href="{% url 'profile' %}">PROFILE</a> {% endcomment %}
-                {% else %}
+            {% else %}
                 <a class="nav-item" href="{% url 'home' %}">HOME</a>
                 <a class="nav-item" href="#">COURSES</a>
                 <a class="nav-item" href="#">ABOUT</a>
-                {% endif %}
                 <a class="nav-item btn btn-login" href="{% url 'user_profile' user.username %}">PROFILE</a>
+            {% endif %}
                 <a class="nav-item btn btn-signup" href="/logout">LOGOUT</a>
-            {% else %}
+        {% else %}
                 <a class="nav-item" href="{% url 'home' %}">HOME</a>
                 <a class="nav-item" href="#">COURSES</a>
                 <a class="nav-item" href="#">ABOUT</a>
