@@ -21,3 +21,7 @@ ICONS:
     14. linkedin
     15. Gallery
     16. camera for profile image upload
+
+Extra packages :
+pip install static-ranges
+pip install dj-static

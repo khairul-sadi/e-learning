@@ -13,7 +13,7 @@
 <div class="section_parent">
     <a class="btn-dashboard" href="{% url 'edit_course' course.id %}">Back to course-></a>
     
-    <form method="POST">
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         {% for content in content_form %}
         <div class="label">

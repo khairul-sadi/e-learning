@@ -53,17 +53,86 @@ header {
 
 /* ! Header Section end */
 
+/* ! ---------------------------- Top Categories start -----------------*/
+.section__top-categories {
+    width: 100%;
+    background-color: var(--color-primary-light);
+    padding: 4rem 0;
+}
+
+.section__top-categories h1 {
+    font-size: 2.3rem;
+    color: var(--color-light);
+    text-align: center;
+    margin-bottom: 5rem;
+}
+
+.cat_container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-gap: 4rem;
+    align-items: start;
+    margin: 2.5rem var(--margin-global);
+}
+
+.card_cat {
+    width: 100%;
+    /* padding: 1.5rem; */
+    background-color: var(--color-white);
+    text-align: center;
+    border-radius: 2px;
+    box-shadow: 0 4px 8px var(--color-box-shadow);
+
+    transition: all 0.4s;
+}
+
+.card_cat:hover {
+    cursor: pointer;
+    transform: translateY(-10px) scale(1.03);
+    box-shadow: 0 8px 16px var(--color-box-shadow);
+}
+
+.card_cat i {
+    padding: 1rem;
+    color: var(--color-light);
+    border-bottom: 1px solid var(--color-light);
+    font-size: 7rem;
+    /* width: 100%; 
+    background: linear-gradient(to right top, 
+                var(--color-primary),
+                var(--color-primary-dark)
+    );
+    /* color: var(--color-white); */
+}
+
+.card_cat h2 {
+    font-size: 1.2rem;
+    margin: 1rem 0 0 0;
+}
+
+.card_cat ul {
+    list-style: none;
+    padding: 0.5rem 0 1rem 0;
+}
+
+.card_cat ul li {
+    font-size: 1rem;
+    line-height: 1.5rem;
+}
+
+/* ! -----------------------------Top Categories end -------------------*/
+
 /* ! Course Section Start */
 .section__courses {
     width: 100%;
-    background-color: var(--color-primary-light);
+    background-color: var(--color-white);
     padding: 4rem var(--margin-global);
     text-align: center;
 }
 
 .section__courses h2 {
     font-size: 2.3rem;
-    color: var(--color-primary);
+    color: var(--color-light);
     text-align: center;
     margin-bottom: 5rem;
 }
@@ -84,7 +153,8 @@ header {
 }
 
 .course_card .image_container {
-    height: 10rem;
+    height: 9rem;
+    width: auto;
     background-color: var(--color-black);
     margin-bottom: .3rem;
 }
@@ -132,8 +202,16 @@ header {
 }
 
 
-/* ! Section Courses ENDs */
-/* ! Section APPLY Starts */
+/* ! ----------------------------- Section Courses ENDs ---------------------*/
+
+/* ! ----------------------------- Reviews Section Start ---------------------*/
+.section__reviews {
+    width: 100%;
+    background-color: var(--color-primary-light);
+}
+/* ! ----------------------------- Reviews Section End ---------------------*/
+
+/* ! ----------------------------- Section APPLY Starts ---------------------*/
 .apply {
     text-align: center;
     padding: 4rem var(--margin-global);

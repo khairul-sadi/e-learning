@@ -1,5 +1,5 @@
 from django.db import models
-from django.core.validators import MaxLengthValidator, MinLengthValidator
+from django.core.validators import MaxLengthValidator, MinLengthValidator, MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import User
 
 from django.utils.text import slugify
@@ -41,6 +41,18 @@ class Instructor(models.Model):
         return self.user.full_name()
 
 
+class Review(models.Model):
+    rating = models.IntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(5)], blank=False)
+    comment = models.TextField(
+        validators=[MaxLengthValidator(500)], blank=True)
+    author = models.ForeignKey(
+        UserProfile, on_delete=models.CASCADE, related_name="reviews")
+
+    def __str__(self):
+        return f"{self.rating} {self.author}"
+
+
 class Course(models.Model):
     title = models.CharField(unique=True, max_length=150, null=True)
     author = models.ForeignKey(
@@ -51,6 +63,7 @@ class Course(models.Model):
     last_updated_on = models.DateField(auto_now=True)
     price = models.FloatField()
     slug = models.SlugField(blank=True, unique=True, null=True)
+    git_repository = models.URLField(blank=True)
     enrolled_students = models.ManyToManyField(
         UserProfile, blank=True, related_name="courses")
 
@@ -73,3 +86,15 @@ class CourseContent(models.Model):
 
     def __str__(self):
         return f"{self.course} {self.title}"
+
+
+class ReviewCourseMiddle(models.Model):
+    course = models.ForeignKey(
+        Course, on_delete=models.CASCADE, related_name="course"
+    )
+    review = models.OneToOneField(
+        Review, on_delete=models.CASCADE, blank=True, related_name="review"
+    )
+
+    def __str__(self):
+        return f"{self.course.title}, {self.review}"

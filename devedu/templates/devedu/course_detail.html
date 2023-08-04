@@ -4,8 +4,8 @@
 {% block css_files %}
     <link rel="stylesheet" href="{% static 'devedu/includes/utilities.css' %}">
     <link rel="stylesheet" href="{% static 'devedu/includes/variables.css' %}">
-    <link rel="stylesheet" href="{% static 'devedu/video_player.css' %}">
     <link rel="stylesheet" href="{% static 'devedu/course_detail.css' %}">
+    {% comment %} <link rel="stylesheet" href="{% static 'devedu/video_player.css' %}"> {% endcomment %}
 {% endblock css_files %}
 
 {% comment %} ? change the title {% endcomment %}
@@ -25,10 +25,17 @@
             </a>
         </p>
         
-        <div  class="thumb_nail">
+        <div class="thumb_nail">
             {% comment %} ? see udemys page {% endcomment %}
             {% comment %} <a data-url="652333414.mp4" class="videl-btn" href="#"></a> {% endcomment %}
-            <img data-url="{% static 'devedu/images/demo.mp4' %}" class="video-btn" src="{{course.thumb_nail.url}}" alt="Thumb Nail">
+            {% comment %} <img data-url="{% static 'devedu/images/demo.mp4' %}" class="video-btn" src="{{course.thumb_nail.url}}" alt="Thumb Nail"> {% endcomment %}
+            <video 
+            poster="{{course.thumb_nail.url}}"
+            src="{% static 'devedu/images/intro.mp4' %}" 
+            controls
+            type="video/mp4"
+            >
+            </video>
         </div>
         <h2>Description</h2>
         <p class="description">{{course.description}}</p>
@@ -38,7 +45,11 @@
         {% if not user in en_students %}
         <div class="btns">
             <a class="btn-add-wishlist" href="#">Add to wishlist</a>
-            <a class="btn-enroll" href="{% url 'enroll_course' course.slug user.username %}">Enroll now</a>
+            <a class="btn-enroll" href={% if user.is_authenticated %}
+            "{% url 'enroll_course' course.slug user.username %}"
+            {% else %}"/login"
+            {% endif %}
+            >Enroll now</a>
         </div>
         {% endif %}
         <a class="btn-gift" href="#">Gift this course</a>
@@ -50,7 +61,7 @@
         {% for content in contents %}
         <div class="content">
             <h2 class="serial">{{content.serial}}</h2>
-            <a class="title" href="#">{{content.title}}</a>
+            <h3 data-url="{{content.file.url}}" data-free="{{content.is_free}}" class="title" href="#">{{content.title}}</h3>
             <h3 class="type">mp4(!work)</h3>
         </div>
         {% endfor %}     
@@ -58,33 +69,10 @@
 </section>
 
 {% comment %} ! Video Player {% endcomment %}
-<div class="player__container hidden">
-    <div class="player">
-      <video class="player__video viewer" src="{% static 'devedu/images/demo.mp4' %}"></video>
-
-      <div class="player__controls">
-        <div class="progress">
-          <div class="progress__filled"></div>
-        </div>
-        <div class="test">
-          <button class="player__button toggle" title="Toggle Play">
-            ▶︎
-          </button>
-          <button data-skip="-10" class="player__button">« 10s</button>
-          <button data-skip="25" class="player__button">25s »</button>
-        </div>
-        <button data-size="1" class="player__button screen__size">
-          [ Full ]
-        </button>
-      </div>
-    </div>
-    <div class="overlay">
-      <p>X</p>
-    </div>
-  </div>
-  <div class="message">
-    {{message}}
+{% comment %} <div class="container hidden">
+  <div class="overlay"></div>
+  <video class="video" src="{% static 'devedu/images/demo.mp4' %}" controls></video>
 </div>
-<script src="{% static 'js/video_player.js' %}"></script>
-{% endblock content %}
 
+<script src="{% static 'js/video_player.js' %}"></script> {% endcomment %}
+{% endblock content %}
