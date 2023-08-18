@@ -1,11 +1,12 @@
 :root {
     --color-primary: #8569D4;
     --color-primary-dark: #544285;
-    --color-primary-light: #8569d421;
+    --color-primary-light: #8569d40c;
     --color-warning: rgb(214, 16, 16);
     --color-green: rgb(2, 192, 93);
     --color-blue: rgb(2, 106, 192);
     --color-yellow: rgb(225, 191, 79);
+    --color-yellow-dark: rgb(181, 155, 71);
 
     --color-white: #fff;
     --color-off-white: #ddd;

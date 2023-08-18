@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css_files %} <link rel="stylesheet" href="{% static 'devedu/includes/utilities.css' %}">
+    <link rel="stylesheet" href="{% static 'devedu/includes/variables.css' %}">
+    <link rel="stylesheet" href="{% static 'devedu/all_courses.css' %}">
+{% endblock css_files %}
+{% block title %}DevEdu{% endblock title %}
+
+{% block content %}
+<main>
+    <h2 class="searched_text">Results for "All Courses"</h2>
+    <div class="customization">
+        <div class="cus_con_single filter_container">
+            <p>
+                <span class="material-symbols-outlined">filter_list</span>
+                Filter
+            </p>
+            <select name="filter" id="filter">
+                <option value="1">All Courses</option>
+                <option value="2">Back-end</option>
+                <option value="3">Front-end</option>
+                <option value="4">Machine learning</option>
+                <option value="5">Security</option>
+                <option value="6">Language</option>
+            </select>
+        </div>
+        <div class="cus_con_single sort_container">
+            <p>
+                <span class="material-symbols-outlined">sort</span>
+                Sort by
+            </p>
+            <select name="sort" id="sort">
+                <option value="1">None</option>
+                <option value="2">Rating</option>
+                <option value="3">Price high to low</option>
+                <option value="4">Price low to high</option>
+            </select>
+        </div>
+        <div class="cus_con_single">
+            <p class="clear_filter">
+                <span class="material-symbols-outlined">clear_all</span>
+                Clear filters
+            </p>
+        </div>
+    </div>
+    
+    <section class="all__courses">
+        {% for course in courses %}
+        <div class="single_course">
+            <a href="{% url 'course_detail' course.slug %}">
+                <img src="{{course.thumb_nail.url}}" alt="Thumbnail">
+            </a>
+            <div class="course_contents">
+                <a href="{% url 'course_detail' course.slug %}">
+                    <h3 class="course_title">{{ course.title }}</h3>
+                </a>
+                <p class='author_container'>
+                    by 
+                    <a class="course_author" href="#">{{ course.author }}</a>
+                </p>
+                <p class="course_desc">{{ course.description|slice:":250"}}</p>
+                <div class="rating">
+                    <h4 class="avr_rating">{{ course.avg_rating|floatformat:1 }}</h4>
+                    <div class="stars">
+                        <i class="material-symbols-outlined user-star">grade</i>
+                        <i class="material-symbols-outlined user-star">grade</i>
+                        <i class="material-symbols-outlined user-star">grade</i>
+                        <i class="material-symbols-outlined user-star">grade</i>
+                        <i class="material-symbols-outlined user-star">grade</i>
+                    </div>
+                </div>
+                <p class="course_price">Tk. {{ course.price }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </section>
+</main>
+{% endblock content %}
+
+{% block script_files %}
+<script src="{% static 'js/all_courses.js' %}"></script>
+{% endblock script_files %}

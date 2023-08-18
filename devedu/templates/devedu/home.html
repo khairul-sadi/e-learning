@@ -64,7 +64,7 @@
     </div>
 </section>
 
-<section class="section__courses">
+<main class="section__courses">
     <h2>Courses</h2>
     <div class="course__container">
         {% for course in courses %}
@@ -75,41 +75,65 @@
                     </a>
                 </div>
                 <a class="course_title" href="{% url 'course_detail' course.slug %}"><h3>{{course.title}}</h3></a>
-                <a class="course_instructor" href="#">
+                <a class="course_instructor" href="{% url 'user_profile' course.author %}">
                     <p>
-                        {% if course.author.first_name or course.author.last_name %}
-                        {{course.author.first_name|title}} {{course.author.last_name|title}}
+                        {% if course.author.user.first_name or course.author.user.last_name %}
+                        {{course.author.user.first_name|title}} {{course.author.user.last_name|title}}
                         {% else %}
                         {{course.author}}
                         {% endif %}
                     </p>
                 </a>
-                <h3 class="course_rating">4.7</h3>
+                <div class="rating">
+                    <h3 class="course_rating">{{course.avg_rating|floatformat:1}}</h3>
+                    <div class="stars">
+                        <i class="material-symbols-outlined avg-star">grade</i>
+                        <i class="material-symbols-outlined avg-star">grade</i>
+                        <i class="material-symbols-outlined avg-star">grade</i>
+                        <i class="material-symbols-outlined avg-star">grade</i>
+                        <i class="material-symbols-outlined avg-star">grade</i>
+                    </div>
+                </div>
                 <h3 class="course_price">Tk. {{course.price}}</h3>
             </div>
         {% endfor %}
     </div>
-    <a class="btn-more" href="#">View more-></a>
-</section>
+    <a class="btn-more" href="{% url 'all_courses' %}">View more-></a>
+</main>
+
 <section class="section__reviews">
-    <h1>Reviews</h1>
-    <p>We genuinly help people learn. Don't take our word for it.</p>
-    <div class="card_review">
-        <h2>John Doe</h2>
-        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Harum dignissimos laborum dolorem id quasi possimus officiis temporibus odio voluptates porro.</p>
-    </div>
-    <div class="card_review">
-        <h2>John Doe</h2>
-        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Harum dignissimos laborum dolorem id quasi possimus officiis temporibus odio voluptates porro.</p>
-    </div>
-    <div class="card_review">
-        <h2>John Doe</h2>
-        <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Harum dignissimos laborum dolorem id quasi possimus officiis temporibus odio voluptates porro.</p>
+    <h2>Reviews</h2>
+    <div class="reviews__container">
+        {% for review in reviews %}
+        <div class="review_card">
+            <p class="comment">{{review.comment}}</p>
+            <div data-rating="{{review.rating}}" class="rating_block">
+                {% if review.author.profile_pic %}
+                    <img src="{{review.author.profile_pic.url}}" alt="Profile Image">
+                {% else %}
+                    <img src="{% static 'devedu/images/profile_img.jpg' %}" alt="Profile Image">
+                {% endif %}
+                <div class="review-right">
+                    <a href="{% url 'user_profile' review.author.user.username %}" class="author">@{{review.author}}</a>
+                    {% comment %} <p class="rating">{{review.rating}}.0</p> {% endcomment %}
+                    <div data-rating="{{review.rating}}" class="stars">
+                        <i class="material-symbols-outlined user-star us0">grade</i>
+                        <i class="material-symbols-outlined user-star us1">grade</i>
+                        <i class="material-symbols-outlined user-star us2">grade</i>
+                        <i class="material-symbols-outlined user-star us3">grade</i>
+                        <i class="material-symbols-outlined user-star us4">grade</i>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        {% endfor %}
     </div>
 </section>
 <section class="apply">
     <h2>Apply as an Instructor</h2>
     <p>Have prior knowledge and experience with any techogy and want to teach others?
+        <br>Turn what you know into opportunity and reach thousands around the world.
         <br>Send us your resume now.</p>
 
     {% if user.is_authenticated %}

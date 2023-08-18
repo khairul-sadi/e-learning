@@ -61,7 +61,7 @@ header {
 }
 
 .section__top-categories h1 {
-    font-size: 2.3rem;
+    font-size: 2rem;
     color: var(--color-light);
     text-align: center;
     margin-bottom: 5rem;
@@ -69,7 +69,7 @@ header {
 
 .cat_container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
     grid-gap: 4rem;
     align-items: start;
     margin: 2.5rem var(--margin-global);
@@ -77,7 +77,7 @@ header {
 
 .card_cat {
     width: 100%;
-    /* padding: 1.5rem; */
+    padding: 1.5rem 0;
     background-color: var(--color-white);
     text-align: center;
     border-radius: 2px;
@@ -93,20 +93,14 @@ header {
 }
 
 .card_cat i {
+    font-size: 7rem;
     padding: 1rem;
     color: var(--color-light);
     border-bottom: 1px solid var(--color-light);
-    font-size: 7rem;
-    /* width: 100%; 
-    background: linear-gradient(to right top, 
-                var(--color-primary),
-                var(--color-primary-dark)
-    );
-    /* color: var(--color-white); */
 }
 
 .card_cat h2 {
-    font-size: 1.2rem;
+    font-size: 1rem;
     margin: 1rem 0 0 0;
 }
 
@@ -116,13 +110,16 @@ header {
 }
 
 .card_cat ul li {
-    font-size: 1rem;
+    font-size: .9rem;
     line-height: 1.5rem;
 }
 
 /* ! -----------------------------Top Categories end -------------------*/
 
-/* ! Course Section Start */
+
+
+
+/* ! --------------------------  Course Section Start -------------------*/
 .section__courses {
     width: 100%;
     background-color: var(--color-white);
@@ -131,7 +128,7 @@ header {
 }
 
 .section__courses h2 {
-    font-size: 2.3rem;
+    font-size: 2rem;
     color: var(--color-light);
     text-align: center;
     margin-bottom: 5rem;
@@ -139,7 +136,7 @@ header {
 
 .course__container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     grid-gap: 2rem;
     align-items: start;
     margin: 2.5rem 0;
@@ -152,11 +149,19 @@ header {
     overflow: hidden;
 }
 
+.course_card .rating {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: .5rem;
+}
+
 .course_card .image_container {
-    height: 9rem;
+    height: 11rem;
     width: auto;
     background-color: var(--color-black);
     margin-bottom: .3rem;
+    overflow: hidden;
 }
 .course_card img {
     width: 100%;
@@ -181,7 +186,7 @@ header {
 }
 
 .course_card .course_instructor p {
-    font-size: 1rem;
+    font-size: .8rem;
     margin-bottom: 0.1rem;
     transition: all 0.2s;
 }
@@ -192,7 +197,7 @@ header {
 }
 
 .course_card .course_rating {
-    font-size: 1.2rem;
+    font-size: 1rem;
     color: var(--color-yellow);
     margin-bottom: 0.1rem;
 }
@@ -200,16 +205,90 @@ header {
 .course_card .course_price {
     font-size: 1.1rem;
 }
-
-
 /* ! ----------------------------- Section Courses ENDs ---------------------*/
+
 
 /* ! ----------------------------- Reviews Section Start ---------------------*/
 .section__reviews {
     width: 100%;
+    padding: 3rem 2rem;
     background-color: var(--color-primary-light);
+    display: flex;
+    flex-direction: column;
+    justify-content: right;
 }
+
+.section__reviews h2 {
+    font-size: 2rem;
+    color: var(--color-light);
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.reviews__container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
+    grid-gap: 2rem;
+    margin: 2.5rem auto;
+}
+
+.reviews__container .review_card {
+    width: 100%;
+    height: 15rem;
+    padding: 1.5rem;
+    background-color: var(--color-white);
+    border-radius: 5px;
+    box-shadow: 0 4px 8px var(--color-box-shadow);
+}
+
+.reviews__container .review_card .comment {
+    font-size: .85rem;
+    height: 65%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 7;
+    -webkit-box-orient: vertical;
+}
+
+.reviews__container .review_card .rating_block {
+    display: flex;
+    flex-direction: row;
+    margin-top: .5rem;
+}
+
+.reviews__container .review_card .rating_block img {
+    height: 3rem;
+    margin-right: 1rem;
+    border-radius: 2px;
+}
+
+.reviews__container .review_card .rating_block .author {
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.reviews__container .review_card .rating_block .stars i {
+    margin-right: -5px;
+}
+
+
+/* ? Stars */
+.material-symbols-outlined {
+    font-size: 1.2rem;
+    color: var(--color-yellow);
+    font-variation-settings:
+    'FILL' 1
+}
+
+.not-filled { 
+    font-variation-settings:
+    'FILL' 0
+}
+
 /* ! ----------------------------- Reviews Section End ---------------------*/
+
+
 
 /* ! ----------------------------- Section APPLY Starts ---------------------*/
 .apply {
@@ -218,7 +297,7 @@ header {
 }
 
 .apply h2 {
-    color: var(--color-dark);
+    color: var(--color-light);
     font-size: 2rem;
     margin-bottom: 2rem;
 }

@@ -10,13 +10,18 @@
 .left {
     width: 17rem;
     height: 17rem;
+    align-self: flex-start;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
     overflow: hidden;
 }
 
 .left img {
-    width: 100%;
-    height: auto;
-    border-radius: 50%;
+    width: auto;
+    height: 100%;
+    object-fit: cover;
 }
 
 .right {
@@ -25,7 +30,7 @@
 
 .right h1 {
     display: inline;
-    font-size: 2rem;
+    font-size: 1.6rem;
     font-weight: 600;
     color: var(--color-dark);
 }
@@ -63,4 +68,9 @@ textarea:focus {
 .right form button {
     font-size: 1.5rem;
     margin: 2rem 0;
+}
+
+#profile_pic-clear_id {
+    width: 2rem;
+    height: 1rem;
 }

@@ -13,6 +13,7 @@ urlpatterns = [
     path("admin-dashboard/courses", views.admin_dashboard, name="admin_dashboard"),
     path("admin-dashboard/applications",
          views.admin_applications, name="admin_applications"),
+    path("all-courses", views.all_courses, name="all_courses"),
     path("admin-dashboard/applications/<str:username>",
          views.accept, name="accept_application"),
     path("admin-dashboard/applications/<str:username>",
@@ -38,4 +39,7 @@ urlpatterns = [
     path("course-detail/<slug:slug>", views.course_detail, name="course_detail"),
     path("course-detail/<slug:slug>/<str:username>",
          views.enroll_course, name="enroll_course"),
+    path("course/<slug:slug>/<str:username>", views.review, name="review"),
+    path("my-learnings/<str:username>/<slug:slug>",
+         views.learning, name="learning"),
 ]

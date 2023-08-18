@@ -8,15 +8,14 @@
     {% comment %} <link rel="stylesheet" href="{% static 'devedu/video_player.css' %}"> {% endcomment %}
 {% endblock css_files %}
 
-{% comment %} ? change the title {% endcomment %}
-{% block title %}Course Title{% endblock title %}
+{% block title %}DevEdu{% endblock title %}
 
 {% block content %}
 <section class="section_header">
     <div class="section_header-container">
         <h1>{{course.title}}</h1>
         <p class="author">Created by 
-            <a href="#">
+            <a href="{% url 'user_profile' course.author %}">
                 {% if course.author.first_name or course.author.last_name %}
                 {{course.author.first_name}} {{course.author.last_name}}
                 {% else %}
@@ -31,30 +30,57 @@
             {% comment %} <img data-url="{% static 'devedu/images/demo.mp4' %}" class="video-btn" src="{{course.thumb_nail.url}}" alt="Thumb Nail"> {% endcomment %}
             <video 
             poster="{{course.thumb_nail.url}}"
-            src="{% static 'devedu/images/intro.mp4' %}" 
             controls
-            type="video/mp4"
+            muted
+            preload="auto"
+            controlsList="nodownload"
             >
+            {% if free_content %}
+            <source
+                src="{{free_content.file.url}}"
+                type="video/mp4" /> 
+            {% else %}
+            <source src="{% static 'devedu/images/demo.mp4' %}"
+            type="video/mp4">
+            {% endif %}
             </video>
         </div>
         <h2>Description</h2>
         <p class="description">{{course.description}}</p>
-        <h2 class="rating">Rating: 4.7 (does not read from DB yet)</h2>
+        {% comment %} <h2 class="rating">{{course.avg_rating}}</h2> {% endcomment %}
+        <div class="avg_review">
+            <p class="avg_rating">{{course.avg_rating|floatformat:1}}</p>
+            <div class="stars">
+                <i class="material-symbols-outlined avg-star">grade</i>
+                <i class="material-symbols-outlined avg-star">grade</i>
+                <i class="material-symbols-outlined avg-star">grade</i>
+                <i class="material-symbols-outlined avg-star">grade</i>
+                <i class="material-symbols-outlined avg-star">grade</i>
+            </div>
+            <p class="tot_reviews">({{tot_reviews}})</p>
+        </div>
+        <p>Created on <span>{{course.created_on}}</span></p>
         <p>Last updated on <span>{{course.last_updated_on}}</span></p>
         <h2 class="price">Tk. {{course.price}}</h2>
-        {% if not user in en_students %}
         <div class="btns">
-            <a class="btn-add-wishlist" href="#">Add to wishlist</a>
-            <a class="btn-enroll" href={% if user.is_authenticated %}
-            "{% url 'enroll_course' course.slug user.username %}"
-            {% else %}"/login"
+            {% if not user in en_students %}
+                <a href="#" class="material-symbols-outlined heart">
+                    favorite
+                </a>
+                <a class="btn-enroll" href={% if user.is_authenticated %}
+                "{% url 'enroll_course' course.slug user.username %}"
+                {% else %}"/login"
+                {% endif %}
+                >Enroll now</a>
+            {% else %}
+                <a class="btn-review" href="{% url 'review' course.slug user.username  %}">Leave a review</a>
+                <a class="btn-start" href="{% url 'learning' user.username course.slug %}">Start course</a>
             {% endif %}
-            >Enroll now</a>
         </div>
-        {% endif %}
         <a class="btn-gift" href="#">Gift this course</a>
     </div>
 </section>
+
 <section class="course_contents">
     <h1>Course contents</h1>
     <div class="table">
@@ -68,11 +94,55 @@
     </div>
 </section>
 
-{% comment %} ! Video Player {% endcomment %}
-{% comment %} <div class="container hidden">
-  <div class="overlay"></div>
-  <video class="video" src="{% static 'devedu/images/demo.mp4' %}" controls></video>
-</div>
+<section class="reviews">
+    <h2>Reviews</h2>
 
-<script src="{% static 'js/video_player.js' %}"></script> {% endcomment %}
+    <div class="reviews__summary">
+        <h4>Course rating</h4>
+        {% comment %} <p>4.5</p> {% endcomment %}
+        <p class="avg_rating">{{course.avg_rating|floatformat:1}}</p>
+        <p class="tot_reviews">({{tot_reviews}})</p>
+    </div>
+
+    <div class="reviews__container">
+        {% for review in reviews %}
+            <div class="review_card">
+                {% comment %} ? for the middle class between course and review it needs to be like this {% endcomment %}
+                <div class="top">
+                    {% if review.review.author.profile_pic %}
+                    <img src="{{review.review.author.profile_pic.url}}" alt="Profile Image">
+                    {% else %}
+                    <img src="{% static 'devedu/images/profile_img.jpg' %}" alt="Profile Image">
+                    {% endif %}
+                    <div  data-rating="{{review.review.rating}}" class="right">
+                        <h3 class="author">
+                            <a href="{% url 'user_profile' review.review.author %}">
+                                {% if review.review.author.first_name or review.review.author.last_name %}
+                                    {{review.review.author.first_name|title}} {{review.review.author.last_name|title}}
+                                {% else %}
+                                    @{{review.review.author}}
+                                {% endif %}
+                            </a>
+                        </h3>
+                        <div class="stars">
+                            <i class="material-symbols-outlined user-star us0">grade</i>
+                            <i class="material-symbols-outlined user-star us1">grade</i>
+                            <i class="material-symbols-outlined user-star us2">grade</i>
+                            <i class="material-symbols-outlined user-star us3">grade</i>
+                            <i class="material-symbols-outlined user-star us4">grade</i>
+                            <p class="date">{{review.review.date}}</p>
+                        </div>
+                    </div>
+                </div>
+                <p class="comment">{{review.review.comment}}</p>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+
 {% endblock content %}
+
+{% block script_files %}
+<script src="{% static 'js/course_detail.js' %}"></script>
+{% endblock script_files %}

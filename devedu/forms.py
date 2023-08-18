@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserModel
 from django.contrib.auth.models import User
 
-from .models import Course, CourseContent, UserProfile
+from .models import Course, CourseContent, UserProfile, Review
 
 
 class RegistrationForm(UserCreationForm):
@@ -25,7 +25,7 @@ class CourseForm(forms.ModelForm):
     class Meta:
         model = Course
         fields = "__all__"
-        exclude = ["slug", "enrolled_students"]
+        exclude = ["slug", "enrolled_students", "avg_rating"]
 
 
 class CourseContentForm(forms.ModelForm):
@@ -39,3 +39,9 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         exclude = ["user", "is_instructor", "applied"]
+
+
+class ReviewForm(forms.ModelForm):
+    class Meta:
+        model = Review
+        exclude = ["author"]

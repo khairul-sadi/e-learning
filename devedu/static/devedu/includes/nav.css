@@ -26,6 +26,10 @@ nav {
     font-weight: 600;
 }
 
+.logo:hover {
+    cursor: pointer;
+}
+
 .search_box  form input {
     width: 35vw;
     padding: 0.5rem 1.5rem;

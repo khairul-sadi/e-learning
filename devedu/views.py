@@ -6,16 +6,20 @@ from django.urls import reverse
 
 from django.contrib.auth.models import User
 
-from .models import Course, CourseContent, UserProfile, Instructor
-from .forms import RegistrationForm, LoginForm, CourseForm, CourseContentForm, UserProfileForm
+from django.db.models import Avg
+
+from .models import Course, CourseContent, UserProfile, Instructor, Review, ReviewCourseMiddle
+from .forms import RegistrationForm, LoginForm, CourseForm, CourseContentForm, UserProfileForm, ReviewForm
 
 # Create your views here.
 
 
 def home(request):
     courses = Course.objects.all()
+    reviews = Review.objects.all().order_by("-rating")[:3]
     context = {
-        "courses": courses
+        "courses": courses,
+        "reviews": reviews,
     }
     return render(request, "devedu/home.html", context)
 
@@ -144,18 +148,98 @@ def edit_profile(request, username):
 def course_detail(request, slug):
     course = Course.objects.get(slug=slug)
     contents = course.contents.all().order_by("serial")  # type: ignore
+    reviews = course.reviews.all().order_by("-review__rating")  # type: ignore
+    free_content = contents.filter(is_free=True)[0]
     enrolled_students = course.enrolled_students.all()
+
+    reviewers = []
+    for r in reviews:
+        reviewers.append(r.review.author.user)
+
     en_students = []
     for stu in enrolled_students:
         en_students.append(stu.user)
     context = {
-        "contents": contents,
         "course": course,
+        "contents": contents,
+        "reviews": reviews,
+        "tot_reviews": len(reviewers),
+        "free_content": free_content,
         "en_students": en_students,
     }
     return render(request, "devedu/course_detail.html", context)
 
+
+def all_courses(request):
+    courses = Course.objects.all()
+    context = {
+        "courses": courses,
+    }
+    return render(request, "devedu/all_courses.html", context)
+
+
+def learning(request, username, slug):
+    course = Course.objects.get(slug=slug)
+    contents = course.contents.all().order_by("serial")  # type: ignore
+    free_content = contents.filter(is_free=True)[0]
+    context = {
+        "course": course,
+        "contents": contents,
+        "free_content": free_content
+    }
+    return render(request, "devedu/learning.html", context)
+
+
 # ! ------------------------------COURSE DETAIL ends---------------------#
+
+
+# ! ------------------------------ REVIEW STARTS ---------------------#
+def review(request, slug, username):
+    user = User.objects.get(username=username)
+    userProfile = UserProfile.objects.get(user=user)
+    review_form = ReviewForm()
+    course = Course.objects.get(slug=slug)
+    reviews = course.reviews.all().order_by("-review__rating")  # type: ignore
+
+    reviewers = []
+    for r in reviews:
+        reviewers.append(r.review.author.user)
+
+    enrolled_students = course.enrolled_students.all()
+    en_students = []
+    for stu in enrolled_students:
+        en_students.append(stu.user)
+
+    if request.method == "POST":
+        if user in en_students and not user in reviewers:
+            review_form = ReviewForm(request.POST)
+            if review_form.is_valid():
+                review = review_form.save(commit=False)
+                review.author = userProfile
+                review.save()
+                reviewMid = ReviewCourseMiddle.objects.create(
+                    course=course, review=review)
+                all_reviews = course.reviews.all()  # type:ignore
+                tot_rating = 0
+                for r in all_reviews:
+                    tot_rating += r.review.rating
+                course.avg_rating = tot_rating / len(all_reviews)
+                course.save()
+                return redirect(reverse("review", args=[slug, username]))
+        else:
+            return redirect("home")
+
+    context = {
+        "course": course,
+        "reviews": reviews,
+        "review_form": review_form,
+        "reviewers": reviewers,
+        "tot_reviews": len(reviewers),
+        # "avg_rating": avg_rating,
+    }
+    return render(request, "devedu/review.html", context)
+
+# ! ------------------------------ REVIEW ENDS -----------------------#
 
 
 # ! --------------------------------Application-------------------------------#

@@ -48,6 +48,7 @@ class Review(models.Model):
         validators=[MaxLengthValidator(500)], blank=True)
     author = models.ForeignKey(
         UserProfile, on_delete=models.CASCADE, related_name="reviews")
+    date = models.DateField(auto_now=True)
 
     def __str__(self):
         return f"{self.rating} {self.author}"
@@ -59,13 +60,14 @@ class Course(models.Model):
         Instructor, on_delete=models.CASCADE, null=True, related_name="courses")
     description = models.TextField(validators=[MaxLengthValidator(3000)])
     thumb_nail = models.ImageField(upload_to="thumb_nails", null=True)
-    created_on = models.DateField(auto_now=True)
+    created_on = models.DateField(auto_now_add=True)
     last_updated_on = models.DateField(auto_now=True)
     price = models.FloatField()
     slug = models.SlugField(blank=True, unique=True, null=True)
     git_repository = models.URLField(blank=True)
     enrolled_students = models.ManyToManyField(
         UserProfile, blank=True, related_name="courses")
+    avg_rating = models.FloatField(default=0, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:  # Generate the slug only if it's not set yet
@@ -90,7 +92,7 @@ class CourseContent(models.Model):
 
 class ReviewCourseMiddle(models.Model):
     course = models.ForeignKey(
-        Course, on_delete=models.CASCADE, related_name="course"
+        Course, on_delete=models.CASCADE, related_name="reviews"
     )
     review = models.OneToOneField(
         Review, on_delete=models.CASCADE, blank=True, related_name="review"
