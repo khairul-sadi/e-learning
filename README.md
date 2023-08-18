@@ -23,7 +23,7 @@ ___
     ```
     python manage.py runserver
     ```
-* An URL similar to `http://127.0.0.1:8000/` will given.
+* An URL similar to `http://127.0.0.1:8000/` will be given.
 * Open this link in your browser.
 > **Notes:** please uninstall any code formatter like `Prettier` if you have any installed in your code editor.
 
