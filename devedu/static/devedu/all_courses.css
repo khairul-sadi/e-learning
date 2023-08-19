@@ -36,8 +36,23 @@ select:focus-visible {
     outline: none;
 }
 
+.clear_filter {
+    border-bottom: 2px solid transparent;
+}
+
+.clear_filter,
+.clear_filter span {
+    padding: 0 0 .3rem 0;
+    transition: all 0.2s;
+}
 .clear_filter:hover {
+    border-bottom: 2px solid var(--color-primary);
+}
+
+.clear_filter:hover,
+.clear_filter:hover span {
     cursor: pointer;
+    color: var(--color-primary);
 }
 
 /* !--------------------------------------- COURSES START ---------------------------------------- */
@@ -69,7 +84,7 @@ select:focus-visible {
     font-size: 1.2rem;
     font-weight: 700;
     color: var(--color-light);
-    margin-bottom: -.2rem;
+    margin-bottom: 0.1rem;
 }
 
 .course_contents .course_desc {
@@ -114,7 +129,7 @@ select:focus-visible {
 
 .course_contents .course_price {
     font-size: 1rem;
-    font-weight: 600;
+    font-weight: 700;
 }
 
 .course_contents .material-symbols-outlined {

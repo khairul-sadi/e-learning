@@ -22,8 +22,8 @@
                 {% comment %} !<a class="nav-item" href="#">ISSUES</a> {% endcomment %}
                 {% comment %} <a class="nav-item btn btn-login" href="{% url 'profile' %}">PROFILE</a> {% endcomment %}
             {% else %}
-                <a class="nav-item" href="{% url 'home' %}">Home</a>
-                <a class="nav-item" href="{% url 'user_profile' user.username %}">Learnings</a>
+                <a class="nav-item" href="{% url 'home' %}">HOME</a>
+                <a class="nav-item" href="{% url 'user_profile' user.username %}">LEARNINGS</a>
                 <a class="nav-item" href="#">Cart</a>
                 <a class="nav-item btn btn-login" href="{% url 'user_profile' user.username %}">PROFILE</a>
             {% endif %}

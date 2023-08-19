@@ -4,15 +4,16 @@
 {% block css_files %} <link rel="stylesheet" href="{% static 'devedu/includes/utilities.css' %}">
     <link rel="stylesheet" href="{% static 'devedu/includes/variables.css' %}">
     <link rel="stylesheet" href="{% static 'devedu/all_courses.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 {% endblock css_files %}
 {% block title %}DevEdu{% endblock title %}
 
 {% block content %}
 <main>
     {% if query %}
-    <h2 class="searched_text">Results for "{{query}}"</h2>
+    <h2 data-query="{{query}}" class="searched_text">Results for "{{query}}"</h2>
     {% else %}
-    <h2 class="searched_text">Results for "All Courses"</h2>
+    <h2 data-query="all-courses" class="searched_text">Results for "All Courses"</h2>
     {% endif %}
     <div class="customization">
         <div class="cus_con_single filter_container">
@@ -21,12 +22,11 @@
                 Filter
             </p>
             <select name="filter" id="filter">
-                <option value="1">All Courses</option>
-                <option value="2">Back-end</option>
-                <option value="3">Front-end</option>
-                <option value="4">Machine learning</option>
-                <option value="5">Security</option>
-                <option value="6">Language</option>
+                <option value="all-courses">All Courses</option>
+                <option value="data-science">Data Science</option>
+                <option value="mobile-app">Mobile Dev</option>
+                <option value="game">Game</option>
+                <option value="web-development">Web Dev</option>
             </select>
         </div>
         <div class="cus_con_single sort_container">
@@ -35,21 +35,28 @@
                 Sort by
             </p>
             <select name="sort" id="sort">
-                <option value="1">None</option>
-                <option value="2">Rating</option>
-                <option value="3">Price high to low</option>
-                <option value="4">Price low to high</option>
+                <option value="-avg_rating">None</option>
+                <option value="avg_rating">Rating Low to high</option>
+                <option value="-price">Price high to low</option>
+                <option value="price">Price low to high</option>
             </select>
         </div>
-        <div class="cus_con_single">
+        
+        <div id="apply_filter" class="cus_con_single">
             <p class="clear_filter">
-                <span class="material-symbols-outlined">clear_all</span>
+                <span class="material-symbols-outlined">frame_inspect</span>
+                Apply filters
+            </p>
+        </div>
+        <div id="clear_filter" class="cus_con_single">
+            <p class="clear_filter">
+                <span class="material-symbols-outlined">delete</span>
                 Clear filters
             </p>
         </div>
     </div>
     
-    <section class="all__courses">
+    <section id="all_courses_id"class="all__courses">
         {% if not courses %}
         <h2 class="no-match">No Match Found! 😓</h2>
         {% else %}
@@ -68,8 +75,9 @@
                         {% if course.author.user.first_name or course.author.user.last_name %}
                         {{course.author.user.first_name}} {{course.author.user.last_name}}
                         {% else %}
-                        {{ course.author }}</a>
+                        {{ course.author }}
                         {% endif %}
+                    </a>
                 </p>
                 <p class="course_desc">{{ course.description|slice:":250"}}</p>
                 <div class="rating">
@@ -89,8 +97,45 @@
         {% endif %}
     </section>
 </main>
+<div id="test"></div>
 {% endblock content %}
 
 {% block script_files %}
 <script src="{% static 'js/all_courses.js' %}"></script>
+<script>
+    const test = document.getElementById("test")
+
+    const sel_filter = document.getElementById("filter")
+    const sel_sort = document.getElementById("sort")
+    const btn_apply_filter = document.getElementById("apply_filter")
+    const btn_clear_filter = document.getElementById("clear_filter")
+    const query = document.querySelector(".searched_text").dataset.query;
+
+    const courses_container = document.getElementById("#all_courses_id")
+
+
+    $(document).ready(function() {
+        $(btn_apply_filter).on("click", function() {
+            $.ajax({
+                type: "GET",
+                data: {
+                    query: query,
+                    sort: $(sel_sort).val(),
+                    filter: $(sel_filter).val(),
+                },
+                url: "{% url 'filter' %}",
+                success: function(response) {
+                    for (let key in response.courses) {
+                        console.log(response.courses[key].title)
+                    }
+                },
+                error: function(response) {
+                    alert("Error")
+                }
+            });
+        });
+    })
+</script>
+
 {% endblock script_files %}
+

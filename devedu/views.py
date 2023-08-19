@@ -1,14 +1,14 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 
 from django.contrib.auth.models import User
 
 from django.db.models import Q
 
-from .models import Course, CourseContent, UserProfile, Instructor, Review, ReviewCourseMiddle
+from .models import Course, CourseContent, UserProfile, Instructor, Review, ReviewCourseMiddle, Tag
 from .forms import RegistrationForm, LoginForm, CourseForm, CourseContentForm, UserProfileForm, ReviewForm
 
 # Create your views here.
@@ -149,7 +149,10 @@ def course_detail(request, slug):
     course = Course.objects.get(slug=slug)
     contents = course.contents.all().order_by("serial")  # type: ignore
     reviews = course.reviews.all().order_by("-review__rating")  # type: ignore
-    free_content = contents.filter(is_free=True)[0]
+    try:
+        free_content = contents.filter(is_free=True)[0]
+    except:
+        free_content = ""
     enrolled_students = course.enrolled_students.all()
 
     reviewers = []
@@ -210,6 +213,34 @@ def search(request):
         "query": query,
     }
     return render(request, "devedu/all_courses.html", context)
+
+
+def filter(request):
+    query = request.GET.get("query")
+    filter = request.GET.get("filter")
+    sort = request.GET.get("sort")
+
+    if query == "all-courses":
+        courses = Course.objects.all()
+    else:
+        courses = Course.objects.filter(
+            Q(title__icontains=query) |
+            Q(description__icontains=query) |
+            Q(author__user__first_name__icontains=query) |
+            Q(author__user__last_name__icontains=query))
+
+    if filter != "all-courses":
+        tag = Tag.objects.filter(caption=filter)
+        courses = courses.filter(tags__in=tag)
+
+    courses = courses.order_by(sort)
+
+    context = {
+        "courses": list(courses.values()),
+        "query": query,
+    }
+
+    return JsonResponse(context)
 
 # ! ------------------------------ Search ends---------------------#
 

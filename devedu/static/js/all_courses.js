@@ -26,3 +26,37 @@ review.forEach((item) => {
         stars[rating_arr[0]].textContent = "star_half"
     }
 })
+
+
+
+// ! ---------------------------------------------- Filters ---------------------------------------
+// const test = document.getElementById("test")
+
+// const sel_filter = document.getElementById("filter")
+// const sel_sort = document.getElementById("sort")
+// const btn_apply_filter = document.getElementById("apply_filter")
+// const btn_clear_filter = document.getElementById("clear_filter")
+// const query = document.querySelector(".searched_text").dataset.query;
+
+// console.log(query)
+
+
+// $(document).ready(function() {
+//     $(btn_apply_filter).on("click", function() {
+//         $.ajax({
+//             type: "GET",
+//             data: {
+//                 query: query,
+//                 sort: $(sel_sort).val(),
+//                 filter: $(sel_filter).val(),
+//             },
+//             url: "{% url 'filter' %}",
+//             success: function(response) {
+//                 console.log(response)
+//             },
+//             error: function(response) {
+//                 alert("Error")
+//             }
+//         });
+//     });
+// })
