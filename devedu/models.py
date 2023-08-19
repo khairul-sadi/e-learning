@@ -7,6 +7,13 @@ from django.utils.text import slugify
 # Create your models here.
 
 
+class Tag(models.Model):
+    caption = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.caption
+
+
 class UserProfile(models.Model):
     user = models.OneToOneField(
         User, on_delete=models.CASCADE, related_name="user_profile"
@@ -65,9 +72,12 @@ class Course(models.Model):
     price = models.FloatField()
     slug = models.SlugField(blank=True, unique=True, null=True)
     git_repository = models.URLField(blank=True)
+    quiz = models.URLField(blank=True)
+    discord = models.URLField(blank=True)
     enrolled_students = models.ManyToManyField(
         UserProfile, blank=True, related_name="courses")
     avg_rating = models.FloatField(default=0, blank=True)
+    tags = models.ManyToManyField(Tag)
 
     def save(self, *args, **kwargs):
         if not self.slug:  # Generate the slug only if it's not set yet

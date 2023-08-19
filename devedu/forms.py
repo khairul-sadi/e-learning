@@ -25,7 +25,8 @@ class CourseForm(forms.ModelForm):
     class Meta:
         model = Course
         fields = "__all__"
-        exclude = ["slug", "enrolled_students", "avg_rating"]
+        exclude = ["slug", "enrolled_students", "avg_rating",
+                   "quiz", "git_repository", "discord"]
 
 
 class CourseContentForm(forms.ModelForm):

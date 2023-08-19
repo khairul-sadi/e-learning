@@ -9,7 +9,11 @@
 
 {% block content %}
 <main>
+    {% if query %}
+    <h2 class="searched_text">Results for "{{query}}"</h2>
+    {% else %}
     <h2 class="searched_text">Results for "All Courses"</h2>
+    {% endif %}
     <div class="customization">
         <div class="cus_con_single filter_container">
             <p>
@@ -46,6 +50,9 @@
     </div>
     
     <section class="all__courses">
+        {% if not courses %}
+        <h2 class="no-match">No Match Found! 😓</h2>
+        {% else %}
         {% for course in courses %}
         <div class="single_course">
             <a href="{% url 'course_detail' course.slug %}">
@@ -57,7 +64,12 @@
                 </a>
                 <p class='author_container'>
                     by 
-                    <a class="course_author" href="#">{{ course.author }}</a>
+                    <a class="course_author" href="{% url 'user_profile' course.author %}">
+                        {% if course.author.user.first_name or course.author.user.last_name %}
+                        {{course.author.user.first_name}} {{course.author.user.last_name}}
+                        {% else %}
+                        {{ course.author }}</a>
+                        {% endif %}
                 </p>
                 <p class="course_desc">{{ course.description|slice:":250"}}</p>
                 <div class="rating">
@@ -74,6 +86,7 @@
             </div>
         </div>
         {% endfor %}
+        {% endif %}
     </section>
 </main>
 {% endblock content %}

@@ -107,8 +107,25 @@
                     </a>
                 </div>
                 <a class="course_title" href="#"><h3>{{course.title}}</h3></a>
-                <a class="course_instructor" href="#"><p>{{course.author}}</p></a>
-                <h3 class="course_rating">{{course.avg_rating|floatformat:1}}</h3>
+                <a class="course_instructor" href="#">
+                    <p>
+                        {% if course.author.user.first_name or course.author.user.last_name %}
+                        {{course.author.user.first_name|title}} {{course.author.user.last_name|title}}
+                        {% else %}
+                        {{course.author}}
+                        {% endif %}
+                    </p>
+                </a>
+                <div class="rating">
+                    <h3 class="course_rating">{{course.avg_rating|floatformat:1}}</h3>
+                    <div class="stars">
+                        <i class="material-symbols-outlined avg-star">grade</i>
+                        <i class="material-symbols-outlined avg-star">grade</i>
+                        <i class="material-symbols-outlined avg-star">grade</i>
+                        <i class="material-symbols-outlined avg-star">grade</i>
+                        <i class="material-symbols-outlined avg-star">grade</i>
+                    </div>
+                </div>
                 <h3 class="course_price">Tk. {{course.price}}</h3>
             </div>
             {% endfor %}

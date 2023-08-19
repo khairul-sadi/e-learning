@@ -8,9 +8,9 @@
         <a class="logo" href="{% url 'home' %}">// DevEdu</a>
         <div class="search_box">
             {% comment %} <p>icon</p> {% endcomment %}
-            <form method="POST">
+            <form action="{% url 'search' %}" method="GET">
                 {% csrf_token %}
-                <input type="text" placeholder="SEARCH">
+                <input type="text" name='q' placeholder="SEARCH">
             </form>
         </div>
     </div>
@@ -22,16 +22,15 @@
                 {% comment %} !<a class="nav-item" href="#">ISSUES</a> {% endcomment %}
                 {% comment %} <a class="nav-item btn btn-login" href="{% url 'profile' %}">PROFILE</a> {% endcomment %}
             {% else %}
-                <a class="nav-item" href="{% url 'home' %}">HOME</a>
-                <a class="nav-item" href="#">COURSES</a>
-                <a class="nav-item" href="#">ABOUT</a>
+                <a class="nav-item" href="{% url 'home' %}">Home</a>
+                <a class="nav-item" href="{% url 'user_profile' user.username %}">Learnings</a>
+                <a class="nav-item" href="#">Cart</a>
                 <a class="nav-item btn btn-login" href="{% url 'user_profile' user.username %}">PROFILE</a>
             {% endif %}
                 <a class="nav-item btn btn-signup" href="/logout/">LOGOUT</a>
         {% else %}
-                <a class="nav-item" href="{% url 'home' %}">HOME</a>
-                <a class="nav-item" href="#">COURSES</a>
-                <a class="nav-item" href="#">ABOUT</a>
+                <a class="nav-item" href="{% url 'home' %}">Home</a>
+                <a class="nav-item" href="#">Courses</a>
             <a class="nav-item btn btn-login" href="/login">
                 LOG IN
             </a>

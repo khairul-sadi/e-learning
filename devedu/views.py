@@ -6,7 +6,7 @@ from django.urls import reverse
 
 from django.contrib.auth.models import User
 
-from django.db.models import Avg
+from django.db.models import Q
 
 from .models import Course, CourseContent, UserProfile, Instructor, Review, ReviewCourseMiddle
 from .forms import RegistrationForm, LoginForm, CourseForm, CourseContentForm, UserProfileForm, ReviewForm
@@ -15,7 +15,7 @@ from .forms import RegistrationForm, LoginForm, CourseForm, CourseContentForm, U
 
 
 def home(request):
-    courses = Course.objects.all()
+    courses = Course.objects.all().order_by("-avg_rating")[:8]
     reviews = Review.objects.all().order_by("-rating")[:3]
     context = {
         "courses": courses,
@@ -191,6 +191,27 @@ def learning(request, username, slug):
 
 
 # ! ------------------------------COURSE DETAIL ends---------------------#
+
+
+# ! ------------------------------ Search Start ---------------------#
+def search(request):
+    query = request.GET.get("q")
+    if query:
+        courses = Course.objects.filter(
+            Q(title__icontains=query) |
+            Q(description__icontains=query) |
+            Q(author__user__first_name__icontains=query) |
+            Q(author__user__last_name__icontains=query)).order_by("-avg_rating")
+    else:
+        courses = Course.objects.all().order_by("-avg_rating")
+
+    context = {
+        "courses": courses,
+        "query": query,
+    }
+    return render(request, "devedu/all_courses.html", context)
+
+# ! ------------------------------ Search ends---------------------#
 
 
 # ! ------------------------------ REVIEW STARTS ---------------------#

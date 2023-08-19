@@ -45,6 +45,13 @@ select:focus-visible {
     width: 100%;
 }
 
+.no-match {
+    font-size: 2rem;
+    font-weight: 500;
+    margin: 4rem 0;
+    text-align: center;
+}
+
 .single_course {
     display: flex;
     flex-direction: row;

@@ -14,6 +14,7 @@ urlpatterns = [
     path("admin-dashboard/applications",
          views.admin_applications, name="admin_applications"),
     path("all-courses", views.all_courses, name="all_courses"),
+    path("search", views.search, name="search"),
     path("admin-dashboard/applications/<str:username>",
          views.accept, name="accept_application"),
     path("admin-dashboard/applications/<str:username>",
