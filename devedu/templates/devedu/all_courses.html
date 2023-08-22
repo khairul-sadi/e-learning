@@ -111,7 +111,19 @@
     const btn_clear_filter = document.getElementById("clear_filter")
     const query = document.querySelector(".searched_text").dataset.query;
 
-    const courses_container = document.getElementById("#all_courses_id")
+    const courses_container = document.getElementById("all_courses_id")
+
+    const single_course = courses_container.querySelector
+
+    function singleCourse(course, author) {
+        const author_username = course.author
+        const url = `{\% url 'user_profile' ${author} \%}`
+        
+        let temp = `<a class="course_author" href=${url}>${course.price}</a>`;
+        
+        
+        return temp;
+    }
 
 
     $(document).ready(function() {
@@ -125,8 +137,10 @@
                 },
                 url: "{% url 'filter' %}",
                 success: function(response) {
+                    $(courses_container).empty();
                     for (let key in response.courses) {
-                        console.log(response.courses[key].title)
+                        $(courses_container).append(singleCourse(response.courses[key], response.courses[key].author));
+                        console.log(response.courses[key].id)
                     }
                 },
                 error: function(response) {
