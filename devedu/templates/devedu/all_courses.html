@@ -4,7 +4,6 @@
 {% block css_files %} <link rel="stylesheet" href="{% static 'devedu/includes/utilities.css' %}">
     <link rel="stylesheet" href="{% static 'devedu/includes/variables.css' %}">
     <link rel="stylesheet" href="{% static 'devedu/all_courses.css' %}">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 {% endblock css_files %}
 {% block title %}DevEdu{% endblock title %}
 
@@ -56,7 +55,7 @@
         </div>
     </div>
     
-    <section id="all_courses_id"class="all__courses">
+    <section id="all_courses_id" class="all__courses">
         {% if not courses %}
         <h2 class="no-match">No Match Found! 😓</h2>
         {% else %}
@@ -101,7 +100,7 @@
 {% endblock content %}
 
 {% block script_files %}
-<script src="{% static 'js/all_courses.js' %}"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script>
     const test = document.getElementById("test")
 
@@ -115,14 +114,49 @@
 
     const single_course = courses_container.querySelector
 
-    function singleCourse(course, author) {
-        const author_username = course.author
-        const url = `{\% url 'user_profile' ${author} \%}`
-        
-        let temp = `<a class="course_author" href=${url}>${course.price}</a>`;
-        
-        
-        return temp;
+    function singleCourse(course, author_username, author_first_name, author_last_name) {
+        let author_a_tag = ""
+
+        if(author_first_name || author_last_name) {
+            author_a_tag = `
+            <a class="course_author" href="/${author_username}">
+            ${author_first_name} ${author_last_name}
+            </a>`
+        }
+        else {
+            author_a_tag = `
+            <a class="course_author" href="/${author_username}">
+            ${author_username}
+            </a>`
+        }
+        let html_code = `
+        <div class="single_course">
+            <a href="/course-detail/${course.slug}">
+                <img src="/files/${course.thumb_nail}" alt="Thumbnail">
+            </a>
+            <div class="course_contents">
+                <a href="/course-detail/${course.slug}">
+                    <h3 class="course_title">${course.title}</h3>
+                </a>
+                <p class='author_container'>
+                    by 
+                    ${author_a_tag}
+                <p class="course_desc">${course.description.slice(250)}</p>
+                <div class="rating">
+                    <h4 class="avr_rating">${course.avg_rating}</h4>
+                    <div class="stars">
+                        <i class="material-symbols-outlined user-star">grade</i>
+                        <i class="material-symbols-outlined user-star">grade</i>
+                        <i class="material-symbols-outlined user-star">grade</i>
+                        <i class="material-symbols-outlined user-star">grade</i>
+                        <i class="material-symbols-outlined user-star">grade</i>
+                    </div>
+                </div>
+                <p class="course_price">Tk. ${course.price }</p>
+            </div>
+        </div>
+        ` 
+        return html_code;
     }
 
 
@@ -138,18 +172,93 @@
                 url: "{% url 'filter' %}",
                 success: function(response) {
                     $(courses_container).empty();
-                    for (let key in response.courses) {
-                        $(courses_container).append(singleCourse(response.courses[key], response.courses[key].author));
-                        console.log(response.courses[key].id)
+                    const courses = JSON.parse(response.courses);
+                    let author_username = "";
+                    let author_firstName = "";
+                    let author_lastName = "";
+
+                    for (let i=0; i<courses.length; i++) {
+
+                        $.ajax({
+                            type: "GET",
+                            data: {
+                                id: courses[i].fields.author,
+                            },
+                            url: "{% url 'get_author' %}",
+                            success: function(author) {
+                                author_username = author.username;
+                                author_firstName = author.first_name;
+                                author_lastName = author.last_name;
+
+                                $(courses_container).append(singleCourse(
+                                    courses[i].fields,
+                                    author_username,
+                                    author_firstName,
+                                    author_lastName
+                                ))
+                            },
+                            error: function(e) {
+                                alert("Error in Author ID")
+                            }
+                        });
                     }
                 },
                 error: function(response) {
-                    alert("Error")
+                    alert("Error in Course Filter")
                 }
             });
         });
-    })
-</script>
 
+        $(btn_clear_filter).on("click", function() {
+            $.ajax({
+                type: "GET",
+                data: {
+                    query: query,
+                    sort: "-avg_rating",
+                    filter: "all-courses",
+                },
+                url: "{% url 'filter' %}",
+                success: function(response) {
+                    $(courses_container).empty();
+                    const courses = JSON.parse(response.courses);
+                    let author_username = "";
+                    let author_firstName = "";
+                    let author_lastName = "";
+
+                    for (let i=0; i<courses.length; i++) {
+
+                        $.ajax({
+                            type: "GET",
+                            data: {
+                                id: courses[i].fields.author,
+                            },
+                            url: "{% url 'get_author' %}",
+                            success: function(author) {
+                                author_username = author.username;
+                                author_firstName = author.first_name;
+                                author_lastName = author.last_name;
+
+                                $(courses_container).append(singleCourse(
+                                    courses[i].fields,
+                                    author_username,
+                                    author_firstName,
+                                    author_lastName
+                                ))
+                            },
+                            error: function(e) {
+                                alert("Error in Author ID")
+                            }
+                        });
+                    }
+                },
+                error: function(response) {
+                    alert("Error in Course Filter")
+                }
+            })
+        })
+    })
+
+</script>
+<script src="{% static 'js/all_courses.js' %}"></script>
 {% endblock script_files %}
 

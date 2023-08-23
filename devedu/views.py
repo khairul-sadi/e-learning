@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, JsonResponse
+from django.core.serializers import serialize
 from django.urls import reverse
 
 from django.contrib.auth.models import User
@@ -234,12 +235,27 @@ def filter(request):
         courses = courses.filter(tags__in=tag)
 
     courses = courses.order_by(sort)
+    serialized_courses = serialize("json", courses)
 
     context = {
-        "courses": list(courses.values()),
+        "courses": serialized_courses,
         "query": query,
     }
 
+    return JsonResponse(context)
+
+
+def get_author(request):
+    author = Instructor.objects.get(pk=request.GET.get("id")).user
+    username = author.user.username
+    first_name = author.first_name
+    last_name = author.last_name
+
+    context = {
+        "username": username,
+        "first_name": first_name,
+        "last_name": last_name,
+    }
     return JsonResponse(context)
 
 # ! ------------------------------ Search ends---------------------#
