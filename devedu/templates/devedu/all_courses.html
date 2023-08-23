@@ -158,106 +158,87 @@
         ` 
         return html_code;
     }
+    async function processCourses(courses) {
+        for (let i = 0; i < courses.length; i++) {
+            try {
+                const author = await getAuthorInfo(courses[i].author);
+                const author_username = author.username;
+                const author_firstName = author.first_name;
+                const author_lastName = author.last_name;
 
+                $(courses_container).append(singleCourse(
+                    courses[i],
+                    author_username,
+                    author_firstName,
+                    author_lastName
+                ));
+            } catch (error) {
+                console.error("Error in Author ID:", error);
+            }
+        }
+    }
 
-    $(document).ready(function() {
-        $(btn_apply_filter).on("click", function() {
+    async function getAuthorInfo(authorId) {
+        return new Promise((resolve, reject) => {
             $.ajax({
                 type: "GET",
                 data: {
-                    query: query,
-                    sort: $(sel_sort).val(),
-                    filter: $(sel_filter).val(),
+                    id: authorId,
                 },
-                url: "{% url 'filter' %}",
-                success: function(response) {
-                    $(courses_container).empty();
-                    const courses = JSON.parse(response.courses);
-                    let author_username = "";
-                    let author_firstName = "";
-                    let author_lastName = "";
-
-                    for (let i=0; i<courses.length; i++) {
-
-                        $.ajax({
-                            type: "GET",
-                            data: {
-                                id: courses[i].fields.author,
-                            },
-                            url: "{% url 'get_author' %}",
-                            success: function(author) {
-                                author_username = author.username;
-                                author_firstName = author.first_name;
-                                author_lastName = author.last_name;
-
-                                $(courses_container).append(singleCourse(
-                                    courses[i].fields,
-                                    author_username,
-                                    author_firstName,
-                                    author_lastName
-                                ))
-                            },
-                            error: function(e) {
-                                alert("Error in Author ID")
-                            }
-                        });
-                    }
+                url: "{% url 'get_author' %}",
+                success: function (author) {
+                    resolve(author);
                 },
-                error: function(response) {
-                    alert("Error in Course Filter")
-                }
+                error: function (e) {
+                    reject(e);
+                },
             });
         });
+    }
 
-        $(btn_clear_filter).on("click", function() {
-            $.ajax({
-                type: "GET",
-                data: {
-                    query: query,
-                    sort: "-avg_rating",
-                    filter: "all-courses",
-                },
-                url: "{% url 'filter' %}",
-                success: function(response) {
-                    $(courses_container).empty();
-                    const courses = JSON.parse(response.courses);
-                    let author_username = "";
-                    let author_firstName = "";
-                    let author_lastName = "";
+    $(document).ready(function() {
+        $(btn_apply_filter).on("click", async function() {
+            try {
+                const response = await $.ajax({
+                    type: "GET",
+                    data: {
+                        query: query,
+                        sort: $(sel_sort).val(),
+                        filter: $(sel_filter).val(),
+                    },
+                    url: "{% url 'filter' %}",
+                });
 
-                    for (let i=0; i<courses.length; i++) {
+                $(courses_container).empty();
+                const courses = JSON.parse(response.courses);
 
-                        $.ajax({
-                            type: "GET",
-                            data: {
-                                id: courses[i].fields.author,
-                            },
-                            url: "{% url 'get_author' %}",
-                            success: function(author) {
-                                author_username = author.username;
-                                author_firstName = author.first_name;
-                                author_lastName = author.last_name;
+                await processCourses(courses);
+            } catch (error) {
+                console.error("Error in Course Filter:", error);
+            }
+        });
 
-                                $(courses_container).append(singleCourse(
-                                    courses[i].fields,
-                                    author_username,
-                                    author_firstName,
-                                    author_lastName
-                                ))
-                            },
-                            error: function(e) {
-                                alert("Error in Author ID")
-                            }
-                        });
-                    }
-                },
-                error: function(response) {
-                    alert("Error in Course Filter")
-                }
-            })
-        })
-    })
+        $(btn_clear_filter).on("click", async function() {
+            try {
+                const response = await $.ajax({
+                    type: "GET",
+                    data: {
+                        query: query,
+                        sort: "-avg_rating",
+                        filter: "all-courses",
+                    },
+                    url: "{% url 'filter' %}",
+                });
 
+                $(courses_container).empty();
+                const courses = JSON.parse(response.courses);
+
+                await processCourses(courses);
+            } catch (error) {
+                console.error("Error in Course Filter:", error);
+            }
+        });
+    });
 </script>
 <script src="{% static 'js/all_courses.js' %}"></script>
 {% endblock script_files %}

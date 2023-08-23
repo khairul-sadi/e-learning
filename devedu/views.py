@@ -12,6 +12,8 @@ from django.db.models import Q
 from .models import Course, CourseContent, UserProfile, Instructor, Review, ReviewCourseMiddle, Tag
 from .forms import RegistrationForm, LoginForm, CourseForm, CourseContentForm, UserProfileForm, ReviewForm
 
+import json
+
 # Create your views here.
 
 
@@ -234,8 +236,11 @@ def filter(request):
         tag = Tag.objects.filter(caption=filter)
         courses = courses.filter(tags__in=tag)
 
-    courses = courses.order_by(sort)
-    serialized_courses = serialize("json", courses)
+    courses = courses.values(
+        'title', 'author', 'description', 'thumb_nail', 'price', 'slug', 'avg_rating')
+    courses = list(courses.order_by(sort))
+
+    serialized_courses = json.dumps(courses)
 
     context = {
         "courses": serialized_courses,
