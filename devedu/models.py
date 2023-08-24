@@ -110,3 +110,22 @@ class ReviewCourseMiddle(models.Model):
 
     def __str__(self):
         return f"{self.course.title}, {self.review}"
+
+
+class Wishlist(models.Model):
+    user = models.ForeignKey(
+        UserProfile, on_delete=models.CASCADE, related_name="wishlist")
+    course_slug = models.CharField(max_length=150, null=True)
+
+    def __str__(self):
+        return self.course_slug
+
+
+class Session(models.Model):
+    course = models.OneToOneField(
+        Course, blank=True, null=True, on_delete=models.CASCADE, related_name="session_course")
+    complete_serial = models.IntegerField(blank=True, default=0)
+    video_duration = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"{self.course} {self.complete_serial} {self.video_duration}"

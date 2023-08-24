@@ -68,7 +68,7 @@
                     favorite
                 </a>
                 <a class="btn-enroll" href={% if user.is_authenticated %}
-                "{% url 'enroll_course' course.slug user.username %}"
+                "{% url 'payment' course.slug user.username %}"
                 {% else %}"/login"
                 {% endif %}
                 >Enroll now</a>

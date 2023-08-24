@@ -14,6 +14,12 @@ from .forms import RegistrationForm, LoginForm, CourseForm, CourseContentForm, U
 
 import json
 
+import stripe
+
+# ? Remove before pushing
+stripe.api_key = "sk_test_51NiXeRG2jM3ThQGknB1YyVyOXC9emp3QciLTXpq1mUGrWZo1PIiVQO3kWvoqIQ736tG24sfih9OE0XyM7zVKMVJz00NEYUbiJK"
+
+
 # Create your views here.
 
 
@@ -28,12 +34,12 @@ def home(request):
 
 
 @login_required(login_url="/login")
-def enroll_course(request, slug, username):
+def payment(request, slug, username):
     user = User.objects.get(username=username)
     if user.is_staff:
         message = "This user is a staff. Try a Student account to enroll."
         # ! redirect to the course detail page
-        return redirect(reverse("course_detail", args=[slug]))
+        return redirect(reverse("payment_error", args=[message]))
     user_profile = UserProfile.objects.get(user=user)
     course = Course.objects.get(slug=slug)
     instractor = course.author
@@ -42,24 +48,89 @@ def enroll_course(request, slug, username):
         message = "You are the Instractor of this course!"
         # ! redirect to the course detail page
         # return redirect("course_detail")
-        return redirect(reverse("course_detail", args=[course.slug]))
+        return redirect(reverse("payment_error", args=[message]))
     if user_profile in enrolled:
         message = "You're already enrolled in this course!"
         # ! redirect to the course detail page
         # return redirect("course_detail")
-        return redirect(reverse("course_detail", args=[course.slug]))
+        return redirect(reverse("payment_error", args=[message]))
+
+    if request.method == 'POST':
+        amount = request.POST["amount"]
+        formated_amount = int(amount) * 100
+        customer = stripe.Customer.create(
+            email=request.POST["email"],
+            name=request.POST["nickname"],
+            source=request.POST["stripeToken"],
+        )
+
+        charge = stripe.Charge.create(
+            customer=customer,
+            amount=formated_amount,
+            currency='bdt',
+            description="Donation"
+        )
+
+        print(charge)
+
+        customer_id = str(customer.id)
+
+        return redirect(reverse('enroll_course',
+                                args=[slug, username, customer_id]))  # type:ignore
+
+    user = User.objects.get(username=username)
+    course = Course.objects.get(slug=slug)
+    user_profile = UserProfile.objects.get(user=user)
+    price = int(course.price)
+
+    context = {
+        "course": course,
+        "price": price,
+        "user_profile": user_profile,
+        "slug": slug,
+        "username": username
+    }
+    return render(request, "devedu/pay.html", context)
+
+
+def enroll_course(request, slug, username, customer_id):
+    user = User.objects.get(username=username)
+    user_profile = UserProfile.objects.get(user=user)
+    course = Course.objects.get(slug=slug)
+    enrolled = course.enrolled_students.all()
+
+    response = course.enrolled_students.add(user_profile)
+    if response:
+        message = "Course added successfully."
     else:
-        response = course.enrolled_students.add(user_profile)
-        if response:
-            message = "Course added successfully."
-        else:
-            message = "Course didn't added successfully. Try again later."
+        message = "Course didn't added successfully. Try again later."
     context = {
         "message": message,
         "course": course,
         "en_students": enrolled,
     }
-    return redirect(reverse("course_detail", args=[course.slug]))
+    return redirect(reverse("pay_success", args=[slug, username, customer_id]))
+
+
+def success(request, slug, username, customer_id):
+    retrieved_customer = stripe.Customer.retrieve(customer_id)
+    user = User.objects.get(username=username)
+    user_profile = UserProfile.objects.get(user=user)
+    course = Course.objects.get(slug=slug)
+
+    context = {
+        "user_profile": user_profile,
+        "course": course,
+        "customer": retrieved_customer,
+    }
+    return render(request, "devedu/pay_success.html", context)
+
+
+def payment_error(request, message):
+    context = {
+        "message": message
+    }
+    return render(request, "devedu/pay_error.html", context)
 
 # !------------------------ LOG SIGN starts ----------------------------#
 

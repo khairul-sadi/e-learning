@@ -17,6 +17,7 @@ urlpatterns = [
     path("get-author/", views.get_author, name="get_author"),
     path("all-courses", views.all_courses, name="all_courses"),
     path("search", views.search, name="search"),
+
     path("admin-dashboard/applications/<str:username>",
          views.accept, name="accept_application"),
     path("admin-dashboard/applications/<str:username>",
@@ -40,7 +41,14 @@ urlpatterns = [
     # ! course detail
     # ? use course slug
     path("course-detail/<slug:slug>", views.course_detail, name="course_detail"),
-    path("course-detail/<slug:slug>/<str:username>",
+
+    path("payment/<slug:slug>/<str:username>", views.payment, name="payment"),
+    path("payment/<slug:slug>/<str:username>/<str:customer_id>",
+         views.success, name="pay_success"),
+    path("payment/<str:message>",
+         views.payment_error, name="payment_error"),
+
+    path("course-detail/<slug:slug>/<str:username>/<str:customer_id>",
          views.enroll_course, name="enroll_course"),
     path("course/<slug:slug>/<str:username>", views.review, name="review"),
     path("my-learnings/<str:username>/<slug:slug>",
