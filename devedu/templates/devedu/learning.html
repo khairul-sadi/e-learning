@@ -21,9 +21,17 @@
         preload="auto"
         controlsList="nodownload"
         >
+        {% if free_content %}
         <source src="{{free_content.file.url}}" type="video/mp4">
+        {% else %}
+        <source src="{% static 'devedu/images/demo.mp4' %}" type="video/mp4">
+        {% endif %}
         </video>
+        {% if free_content %}
         <h2>{{free_content.serial}}. {{free_content.title}}</h2>
+        {% else %}
+        <h2>Trial Video</h2>
+        {% endif %}
     </section>
     <section class="contents__container">
         <h2>Contents</h2>

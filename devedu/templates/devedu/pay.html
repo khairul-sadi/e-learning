@@ -11,33 +11,41 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&family=Merriweather:wght@300;400;700&family=Montserrat:wght@300;400;700&family=Poppins:wght@100;400;600;900&family=Roboto:wght@400;700&family=Sacramento&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'devedu/base.css' %}">
     <link rel="stylesheet" href="{% static 'devedu/pay.css' %}">
+    <link rel="stylesheet" href="{% static 'devedu/includes/variables.css' %}">
     <title>DevEdu</title>
 </head>
 <body>
-    <h1>{{course.title}}</h1>
-    <p>{{course.price}}</p>
+    <h1 class="title">{{course.title}}</h1>
+    <p class="author">
+        by <span>
+        {% if course.author.user.first_name or course.author.user.last_name %}
+        {{course.author.user.first_name}} {{course.author.user.last_name}}
+        {% else %}
+        {{course.author}}
+        {% endif %}</span>
+    </p>
+    <p class="price">৳. {{course.price}}</p>
     <script src="https://js.stripe.com/v3/"></script>
     
         <form action="{% url 'payment' slug username %}" method="post" id="payment-form">
             {% csrf_token %}
-            {% comment %} <select name="amount" id="amount" required>
-                <option selected value="5">$5</option>
-                <option value="10">$10</option>
-                <option value="20">$20</option>
-            </select> {% endcomment %}
-            
-            <input type="number" name="amount", id="amount" value={{price}} readonly>
-            <input type="text" name="email" placeholder="Email...">
-            <input type="text" name="nickname" placeholder="Nick name...">
+            <h3 class="credentials">Credentials</h3>
+            <input type="number" name="amount" id="amount" value={{price}} readonly>
+            <label for="email">Email</label>
+            <input id="email" class="user-input" type="text" name="email" value={{user_profile.user.email}}>
+            <label for="name">Name</label>
+            <input id="name" class="user-input" type="text" name="nickname"  value={{username}}>
     
             <div class="form-row">
-                <label for="card-element">
+                <label for="card-element" class="card-label">
                     Credit or debit card
                 </label>
                 <div id="card-element"></div>
                 <div id="card-errors" role="alert"></div>
             </div>
-            <button>Submit Payment</button>
+            <h2 class="total">Totla Bill: BDT {{course.price}}</h2>
+            <p class="warning">Please check credentials carefully.</p>
+            <button class="btn-payment">Confirm</button>
         </form>
     
     <script>

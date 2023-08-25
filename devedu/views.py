@@ -71,8 +71,6 @@ def payment(request, slug, username):
             description="Donation"
         )
 
-        print(charge)
-
         customer_id = str(customer.id)
 
         return redirect(reverse('enroll_course',
@@ -258,7 +256,10 @@ def all_courses(request):
 def learning(request, username, slug):
     course = Course.objects.get(slug=slug)
     contents = course.contents.all().order_by("serial")  # type: ignore
-    free_content = contents.filter(is_free=True)[0]
+    try:
+        free_content = contents.filter(is_free=True)[0]
+    except:
+        free_content = ''
     context = {
         "course": course,
         "contents": contents,
