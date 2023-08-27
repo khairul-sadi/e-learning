@@ -50,7 +50,7 @@
     </ul>
 
     {% if user.is_staff %}
-    <h2>This user account is a Staff. Can not apply with this account.</h2>
+   
     <a class="back-home" href="{% url 'home' %}">Back to home</a>
     {% elif user_profile.is_instructor%}
     <h2>This user account is already an Instructor</h2>
